@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36616.10 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsyConnect", "PsyConnect\PsyConnect.csproj", "{A6874102-5AED-4555-A0CB-10EE637770BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A6874102-5AED-4555-A0CB-10EE637770BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6874102-5AED-4555-A0CB-10EE637770BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6874102-5AED-4555-A0CB-10EE637770BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6874102-5AED-4555-A0CB-10EE637770BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56584D9D-A7B3-4347-98A8-86C4CDFEE74C}
+	EndGlobalSection
+EndGlobal
