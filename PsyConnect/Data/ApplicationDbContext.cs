@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PsyConnect.Models;
 
 namespace PsyConnect.Data
 {
@@ -9,5 +10,6 @@ namespace PsyConnect.Data
             : base(options)
         {
         }
+        public DbSet<Booking> Bookings { get; set; }
     }
 }
