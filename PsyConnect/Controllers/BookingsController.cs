@@ -1,29 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PsyConnect.Data;
 using PsyConnect.Models;
 
 namespace PsyConnect.Controllers
 {
+    [Authorize]
     public class BookingsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public BookingsController(ApplicationDbContext context)
+        public BookingsController(
+            ApplicationDbContext context,
+            UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Bookings
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Bookings.ToListAsync());
+            // Admin sees everything
+            if (User.IsInRole("Admin"))
+            {
+                var allBookings = await _context.Bookings
+                    .Include(b => b.User)
+                    .ToListAsync();
+                return View(allBookings);
+            }
+
+            // Patient: only his own bookings
+            var userId = _userManager.GetUserId(User);
+
+            var myBookings = await _context.Bookings
+                .Where(b => b.UserId == userId)
+                .ToListAsync();
+
+            return View(myBookings);
         }
+
 
         // GET: Bookings/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -44,76 +63,71 @@ namespace PsyConnect.Controllers
         }
 
         // GET: Bookings/Create
+        [Authorize(Roles = "Patient")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Bookings/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Type,Status,dateTime")] Booking booking)
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> Create(Booking booking)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(booking);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(booking);
+            // attach current user
+            booking.UserId = _userManager.GetUserId(User);
+
+            _context.Bookings.Add(booking);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Bookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var booking = await _context.Bookings.FindAsync(id);
-            if (booking == null)
-            {
-                return NotFound();
-            }
+            if (booking == null) return NotFound();
+
+            var userId = _userManager.GetUserId(User);
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && booking.UserId != userId)
+                return Forbid();
+
             return View(booking);
         }
 
         // POST: Bookings/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Type,Status,dateTime")] Booking booking)
+        public async Task<IActionResult> Edit(int id, Booking booking)
         {
-            if (id != booking.Id)
-            {
-                return NotFound();
-            }
+            if (id != booking.Id) return NotFound();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(booking);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BookingExists(booking.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(booking);
+            var existingBooking = await _context.Bookings.FindAsync(id);
+            if (existingBooking == null) return NotFound();
+
+            var userId = _userManager.GetUserId(User);
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && existingBooking.UserId != userId)
+                return Forbid();
+
+            // update fields
+            existingBooking.Title = booking.Title;
+            existingBooking.Description = booking.Description;
+            existingBooking.Number = booking.Number;
+            existingBooking.Type = booking.Type;
+            existingBooking.Status = booking.Status;
+            existingBooking.dateTime = booking.dateTime;
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Bookings/Delete/5

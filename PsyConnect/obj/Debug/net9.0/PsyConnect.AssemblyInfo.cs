@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PsyConnect")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+338cfce28a5af34410100769496ac542fa27283a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+99f0950d593f4cc267697fbdd3d033c7a348944b")]
 [assembly: System.Reflection.AssemblyProductAttribute("PsyConnect")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PsyConnect")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
