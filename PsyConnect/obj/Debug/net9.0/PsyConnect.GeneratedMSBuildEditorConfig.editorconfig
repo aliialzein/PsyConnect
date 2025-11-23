@@ -17,17 +17,18 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PsyConnect
 build_property.RootNamespace = PsyConnect
-build_property.ProjectDir = C:\Users\alial\source\repos\PsyConnect\PsyConnect\
+build_property.ProjectDir = D:\project_advanced\PsyConnect\PsyConnect\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\alial\source\repos\PsyConnect\PsyConnect
+build_property.MSBuildProjectDirectory = D:\project_advanced\PsyConnect\PsyConnect
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
+<<<<<<< HEAD
 [C:/Users/alial/source/repos/PsyConnect/PsyConnect/Areas/Identity/Pages/Account/AccessDenied.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -217,13 +218,21 @@ build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/alial/source/repos/PsyConnect/PsyConnect/Views/Home/Index.cshtml]
+=======
+[D:/project_advanced/PsyConnect/PsyConnect/Areas/Identity/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/project_advanced/PsyConnect/PsyConnect/Views/Home/Index.cshtml]
+>>>>>>> d2ab0b7 (Cleanup build artifacts + update .gitignore)
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alial/source/repos/PsyConnect/PsyConnect/Views/Home/Privacy.cshtml]
+[D:/project_advanced/PsyConnect/PsyConnect/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+<<<<<<< HEAD
 [C:/Users/alial/source/repos/PsyConnect/PsyConnect/Views/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -237,25 +246,28 @@ build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/alial/source/repos/PsyConnect/PsyConnect/Views/Shared/Error.cshtml]
+=======
+[D:/project_advanced/PsyConnect/PsyConnect/Views/Shared/Error.cshtml]
+>>>>>>> d2ab0b7 (Cleanup build artifacts + update .gitignore)
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alial/source/repos/PsyConnect/PsyConnect/Views/Shared/_LoginPartial.cshtml]
+[D:/project_advanced/PsyConnect/PsyConnect/Views/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alial/source/repos/PsyConnect/PsyConnect/Views/Shared/_ValidationScriptsPartial.cshtml]
+[D:/project_advanced/PsyConnect/PsyConnect/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alial/source/repos/PsyConnect/PsyConnect/Views/_ViewImports.cshtml]
+[D:/project_advanced/PsyConnect/PsyConnect/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alial/source/repos/PsyConnect/PsyConnect/Views/_ViewStart.cshtml]
+[D:/project_advanced/PsyConnect/PsyConnect/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/alial/source/repos/PsyConnect/PsyConnect/Views/Shared/_Layout.cshtml]
+[D:/project_advanced/PsyConnect/PsyConnect/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-gd9uovoiqi

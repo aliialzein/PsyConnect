@@ -8461,23 +8461,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\alial\\.nuget\\packages\\": {},
+    "C:\\Users\\mhmd2\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\PsyConnect.csproj",
+      "projectUniqueName": "D:\\project_advanced\\PsyConnect\\PsyConnect\\PsyConnect.csproj",
       "projectName": "PsyConnect",
-      "projectPath": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\PsyConnect.csproj",
-      "packagesPath": "C:\\Users\\alial\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\obj\\",
+      "projectPath": "D:\\project_advanced\\PsyConnect\\PsyConnect\\PsyConnect.csproj",
+      "packagesPath": "C:\\Users\\mhmd2\\.nuget\\packages\\",
+      "outputPath": "D:\\project_advanced\\PsyConnect\\PsyConnect\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\alial\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\mhmd2\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
