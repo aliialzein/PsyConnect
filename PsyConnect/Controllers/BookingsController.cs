@@ -24,25 +24,62 @@ namespace PsyConnect.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index()
         {
-            // Admin sees everything
             if (User.IsInRole("Admin"))
             {
                 var allBookings = await _context.Bookings
                     .Include(b => b.User)
                     .ToListAsync();
+
+                foreach (var b in allBookings)
+                {
+                    UpdateBookingStatus(b);
+                }
+                await _context.SaveChangesAsync();
+
                 return View(allBookings);
             }
 
-            // Patient: only his own bookings
             var userId = _userManager.GetUserId(User);
 
             var myBookings = await _context.Bookings
                 .Where(b => b.UserId == userId)
                 .ToListAsync();
 
+            foreach (var b in myBookings)
+            {
+                UpdateBookingStatus(b);
+            }
+            await _context.SaveChangesAsync();
+
             return View(myBookings);
         }
+        private void UpdateBookingStatus(Booking booking)
+        {
+            var now = DateTime.Now;
+            var sessionDuration = TimeSpan.FromMinutes(50);
 
+            // If you want to treat the default 0001-01-01 as "not scheduled"
+            if (booking.dateTime == default)
+            {
+                booking.Status = "Pending";
+                return;
+            }
+
+            var start = booking.dateTime;
+
+            if (start > now)
+            {
+                booking.Status = "Pending";
+            }
+            else if (start <= now && start.Add(sessionDuration) > now)
+            {
+                booking.Status = "InProgress";
+            }
+            else
+            {
+                booking.Status = "Completed";
+            }
+        }
 
         // GET: Bookings/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -73,17 +110,73 @@ namespace PsyConnect.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Patient")]
-        public async Task<IActionResult> Create(Booking booking)
+        public async Task<IActionResult> Create(
+            [Bind("Title,Description,Type")] Booking booking,
+            DateTime BookingDate,
+            string SelectedTime)
         {
-            // attach current user
-            booking.UserId = _userManager.GetUserId(User);
+            // Basic check: did JS / user actually select both?
+            if (BookingDate == default || string.IsNullOrWhiteSpace(SelectedTime))
+            {
+                ModelState.AddModelError("dateTime", "Please select a date and a time slot.");
+                return View(booking);
+            }
+
+            // Parse the time slot ("09:00", "14:00", etc.)
+            if (!TimeSpan.TryParse(SelectedTime, out var timeOfDay))
+            {
+                ModelState.AddModelError("dateTime", "Invalid time slot selected.");
+                return View(booking);
+            }
+
+            // Combine date + time into one DateTime
+            var dateValue = BookingDate.Date + timeOfDay;
+            var now = DateTime.Now;
+
+            // 1) No past dates/times
+            if (dateValue <= now)
+            {
+                ModelState.AddModelError("dateTime", "You cannot select a past date or time.");
+                return View(booking);
+            }
+
+            // 2) Only allow fixed time slots
+            var allowedHours = new[] { 9, 10, 11, 12, 14, 15, 16, 17 };
+            if (!allowedHours.Contains(dateValue.Hour) || dateValue.Minute != 0)
+            {
+                ModelState.AddModelError("dateTime",
+                    "Please choose one of the allowed time slots: 9:00, 10:00, 11:00, 14:00, 15:00, or 16:00.");
+                return View(booking);
+            }
+
+            // 3) Prevent double-booking the same slot
+            bool slotTaken = await _context.Bookings
+                .AnyAsync(b => b.dateTime == dateValue);
+
+            if (slotTaken)
+            {
+                ModelState.AddModelError(string.Empty, "This time slot is already booked. Please choose another one.");
+                return View(booking);
+            }
+
+            var userId = _userManager.GetUserId(User);
+
+            // Fill Booking entity
+            booking.UserId = userId;
+            booking.dateTime = dateValue;
+
+            var lastNumber = await _context.Bookings
+                .Where(b => b.UserId == userId)
+                .MaxAsync(b => (int?)b.Number) ?? 0;
+
+            booking.Number = lastNumber + 1;
+            booking.Status = "Pending";
 
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
-
 
         // GET: Bookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -105,30 +198,99 @@ namespace PsyConnect.Controllers
         // POST: Bookings/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Booking booking)
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Id,Title,Description,Type")] Booking formModel,
+            DateTime BookingDate,
+            string SelectedTime)
         {
-            if (id != booking.Id) return NotFound();
+            // 0) Route id check
+            if (id != formModel.Id)
+                return NotFound();
 
-            var existingBooking = await _context.Bookings.FindAsync(id);
-            if (existingBooking == null) return NotFound();
+            // 1) Load existing booking via primary key
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking == null)
+                return NotFound();
 
+            // 2) Any user can reschedule HIS meeting, admin can edit all
             var userId = _userManager.GetUserId(User);
             var isAdmin = User.IsInRole("Admin");
-
-            if (!isAdmin && existingBooking.UserId != userId)
+            if (!isAdmin && booking.UserId != userId)
                 return Forbid();
 
-            // update fields
-            existingBooking.Title = booking.Title;
-            existingBooking.Description = booking.Description;
-            existingBooking.Number = booking.Number;
-            existingBooking.Type = booking.Type;
-            existingBooking.Status = booking.Status;
-            existingBooking.dateTime = booking.dateTime;
+            // NOTE: we do NOT use ModelState.IsValid here – we validate manually
+            // to stay fully parallel with Create.
+
+            // ---------- SAME DATE/TIME LOGIC AS CREATE ----------
+
+            // Basic check: date + time required
+            if (BookingDate == default || string.IsNullOrWhiteSpace(SelectedTime))
+            {
+                ModelState.AddModelError("dateTime", "Please select a date and a time slot.");
+                return View(booking);
+            }
+
+            // Parse timeslot ("09:00", "14:00"...)
+            if (!TimeSpan.TryParse(SelectedTime, out var timeOfDay))
+            {
+                ModelState.AddModelError("dateTime", "Invalid time slot selected.");
+                return View(booking);
+            }
+
+            var dateValue = BookingDate.Date + timeOfDay;
+            var now = DateTime.Now;
+
+            // 1) No past dates/times
+            if (dateValue <= now)
+            {
+                ModelState.AddModelError("dateTime", "You cannot select a past date or time.");
+                return View(booking);
+            }
+
+            // 2) Only allow fixed time slots
+            var allowedHours = new[] { 9, 10, 11, 12, 14, 15, 16, 17 };
+            if (!allowedHours.Contains(dateValue.Hour) || dateValue.Minute != 0)
+            {
+                ModelState.AddModelError(
+                    "dateTime",
+                    "Please choose one of the allowed time slots: 9:00, 10:00, 11:00, 14:00, 15:00, or 16:00."
+                );
+                return View(booking);
+            }
+
+            // 3) Prevent double booking (exclude this booking itself)
+            bool slotTaken = await _context.Bookings
+                .AnyAsync(b => b.Id != booking.Id && b.dateTime == dateValue);
+
+            if (slotTaken)
+            {
+                ModelState.AddModelError(string.Empty, "This time slot is already booked. Please choose another one.");
+                return View(booking);
+            }
+
+            // ---------- APPLY CHANGES ----------
+
+            booking.Title = formModel.Title;
+            booking.Description = formModel.Description;
+            booking.Type = formModel.Type;
+
+            // UserId + Number stay as they are (session count)
+            booking.dateTime = dateValue;
+
+            // Status is NOT changed here; Index() recalculates it using UpdateBookingStatus
 
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
+
+
+
+
+
+
 
         // GET: Bookings/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -161,6 +323,77 @@ namespace PsyConnect.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // ================== CALENDAR EVENTS FOR ADMIN ==================
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminEvents(string? status = null)
+        {
+            var query = _context.Bookings
+                .Include(b => b.User)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(status) && status != "All")
+            {
+                query = query.Where(b => b.Status == status);
+            }
+
+            var events = await query
+                .Select(b => new
+                {
+                    id = b.Id,
+                    title = b.Title + " - " + (b.User != null ? b.User.Email : ""),
+                    start = b.dateTime.ToString("o"), // ISO 8601
+                    extendedProps = new
+                    {
+                        type = b.Type,
+                        status = b.Status,
+                        number = b.Number
+                    },
+                    // simple coloring by status
+                    backgroundColor = b.Status == "Completed" ? "#4caf50" :
+                                      b.Status == "InProgress" ? "#ff9800" :
+                                      "#2196f3",
+                    borderColor = "#ffffff"
+                })
+                .ToListAsync();
+
+            return Json(events);
+        }
+
+        // ================== CALENDAR EVENTS FOR PATIENT ==================
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> MyEvents(string? status = null)
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var query = _context.Bookings
+                .Where(b => b.UserId == userId);
+
+            if (!string.IsNullOrEmpty(status) && status != "All")
+            {
+                query = query.Where(b => b.Status == status);
+            }
+
+            var events = await query
+                .Select(b => new
+                {
+                    id = b.Id,
+                    title = b.Title + " (" + b.Type + ")",
+                    start = b.dateTime.ToString("o"),
+                    extendedProps = new
+                    {
+                        status = b.Status,
+                        number = b.Number
+                    },
+                    backgroundColor = b.Status == "Completed" ? "#4caf50" :
+                                      b.Status == "InProgress" ? "#ff9800" :
+                                      "#2196f3",
+                    borderColor = "#ffffff"
+                })
+                .ToListAsync();
+
+            return Json(events);
         }
 
         private bool BookingExists(int id)

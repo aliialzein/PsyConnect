@@ -1,0 +1,159 @@
+﻿@model IEnumerable<PsyConnect.Models.Booking>
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "My Dashboard";
+
+    string[] monthLabels = ViewBag.MonthlyLabels ?? Array.Empty<string>();
+    int[] monthValues = ViewBag.MonthlyValues ?? Array.Empty<int>();
+
+    var nextSession = ViewBag.NextSession as PsyConnect.Models.Booking;
+}
+
+<h2>My Dashboard</h2>
+
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <div>Total Sessions</div>
+                <h3>@ViewBag.TotalMyBookings</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <div>Upcoming</div>
+                <h3>@ViewBag.UpcomingMyBookings</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <div>Completed</div>
+                <h3>@ViewBag.CompletedMyBookings</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (nextSession != null)
+{
+    <div class="alert alert-info mt-3">
+        <strong>Next session:</strong>
+        @nextSession.dateTime.ToString("ddd dd MMM yyyy HH:mm") (@nextSession.Type)
+    </div>
+}
+
+<hr />
+
+<div class="row mt-3">
+    <div class="col-md-6">
+        <h4>Sessions per month (last 6 months)</h4>
+        <canvas id="monthlyChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4>My calendar</h4>
+            <div>
+                <label>Status filter:</label>
+                <select id="patientStatusFilter" class="form-select form-select-sm" style="width:auto;display:inline-block;">
+                    <option value="All">All</option>
+                    <option value="Pending">Pending</option>
+                    <option value="InProgress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+        </div>
+        <div id="patientCalendar"></div>
+    </div>
+</div>
+
+<hr />
+
+<h4>Upcoming sessions (list)</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date & Time</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.dateTime.ToString("ddd dd MMM yyyy HH:mm")</td>
+                <td>@b.Type</td>
+                <td>@b.Status</td>
+                <td>@b.Title</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/main.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js"></script>
+
+    <script>
+        // ====== Monthly chart ======
+        const monthLabels = @Html.Raw(JsonSerializer.Serialize(monthLabels));
+        const monthValues = @Html.Raw(JsonSerializer.Serialize(monthValues));
+
+        const ctxMonthly = document.getElementById('monthlyChart');
+        new Chart(ctxMonthly, {
+            type: 'line',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Sessions',
+                    data: monthValues,
+                    tension: 0.3
+                }]
+            }
+        });
+
+        // ====== FullCalendar for patient ======
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('patientCalendar');
+            var statusSelect = document.getElementById('patientStatusFilter');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: 600,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                events: function (info, successCallback, failureCallback) {
+                    var status = statusSelect.value;
+                    var url = '/Bookings/MyEvents?status=' + encodeURIComponent(status);
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => successCallback(data))
+                        .catch(err => failureCallback(err));
+                },
+                eventClick: function (info) {
+                    alert(
+                        info.event.title +
+                        '\nStatus: ' + info.event.extendedProps.status +
+                        '\nSession #: ' + info.event.extendedProps.number
+                    );
+                }
+            });
+
+            calendar.render();
+
+            statusSelect.addEventListener('change', function () {
+                calendar.refetchEvents();
+            });
+        });
+    </script>
+}

@@ -3,68 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\alial\\source\\repos\\PsyConnect\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\controllers\\bookingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\controllers\\bookingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\views\\bookings\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\views\\bookings\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\views\\bookings\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\views\\bookings\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\data\\migrations\\20251121191320_addbookinguser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\data\\migrations\\20251121191320_addbookinguser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\views\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\views\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\views\\assign\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\views\\assign\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\controllers\\rolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\models\\assignvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\models\\assignvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\controllers\\assigncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\controllers\\assigncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\views\\assign\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\views\\assign\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\services\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\services\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\views\\roles\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\views\\roles\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\views\\roles\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\views\\roles\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|c:\\users\\alial\\source\\repos\\psyconnect\\psyconnect\\models\\rolevm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A6874102-5AED-4555-A0CB-10EE637770BB}|PsyConnect\\PsyConnect.csproj|solutionrelative:psyconnect\\models\\rolevm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -74,210 +18,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Bookings\\Edit.cshtml",
-              "RelativeDocumentMoniker": "PsyConnect\\Views\\Bookings\\Edit.cshtml",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Bookings\\Edit.cshtml",
-              "RelativeToolTip": "PsyConnect\\Views\\Bookings\\Edit.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADoAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-21T19:23:29.604Z",
+              "DocumentIndex": 0,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "PsyConnect\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "PsyConnect\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-24T16:08:47.943Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Bookings\\Create.cshtml",
-              "RelativeDocumentMoniker": "PsyConnect\\Views\\Bookings\\Create.cshtml",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Bookings\\Create.cshtml",
-              "RelativeToolTip": "PsyConnect\\Views\\Bookings\\Create.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-21T19:22:52.885Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "20251121191320_AddBookingUser.cs",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Data\\Migrations\\20251121191320_AddBookingUser.cs",
-              "RelativeDocumentMoniker": "PsyConnect\\Data\\Migrations\\20251121191320_AddBookingUser.cs",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Data\\Migrations\\20251121191320_AddBookingUser.cs",
-              "RelativeToolTip": "PsyConnect\\Data\\Migrations\\20251121191320_AddBookingUser.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAzwBMAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T19:13:21.284Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Booking.cs",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Models\\Booking.cs",
-              "RelativeDocumentMoniker": "PsyConnect\\Models\\Booking.cs",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Models\\Booking.cs",
-              "RelativeToolTip": "PsyConnect\\Models\\Booking.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAmwAgAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T19:04:50.203Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "BookingsController.cs",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Controllers\\BookingsController.cs",
-              "RelativeDocumentMoniker": "PsyConnect\\Controllers\\BookingsController.cs",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Controllers\\BookingsController.cs",
-              "RelativeToolTip": "PsyConnect\\Controllers\\BookingsController.cs",
-              "ViewState": "AgIAAKsAAAAAAAAAAAAAAH8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T18:54:06.185Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Assign\\Index.cshtml",
-              "RelativeDocumentMoniker": "PsyConnect\\Views\\Assign\\Index.cshtml",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Assign\\Index.cshtml",
-              "RelativeToolTip": "PsyConnect\\Views\\Assign\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-21T16:17:44.259Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "EmailSender.cs",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Services\\EmailSender.cs",
-              "RelativeDocumentMoniker": "PsyConnect\\Services\\EmailSender.cs",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Services\\EmailSender.cs",
-              "RelativeToolTip": "PsyConnect\\Services\\EmailSender.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T12:36:09.508Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Program.cs",
-              "RelativeDocumentMoniker": "PsyConnect\\Program.cs",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Program.cs",
-              "RelativeToolTip": "PsyConnect\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T11:21:43.525Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Index.cshtml",
               "RelativeDocumentMoniker": "PsyConnect\\Views\\Index.cshtml",
               "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Index.cshtml",
               "RelativeToolTip": "PsyConnect\\Views\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-21T08:47:45.221Z",
+              "WhenOpened": "2025-11-24T15:53:58.449Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Assign\\Create.cshtml",
-              "RelativeDocumentMoniker": "PsyConnect\\Views\\Assign\\Create.cshtml",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Assign\\Create.cshtml",
-              "RelativeToolTip": "PsyConnect\\Views\\Assign\\Create.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAkwBsAAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-21T08:01:17.223Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "AssignController.cs",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Controllers\\AssignController.cs",
-              "RelativeDocumentMoniker": "PsyConnect\\Controllers\\AssignController.cs",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Controllers\\AssignController.cs",
-              "RelativeToolTip": "PsyConnect\\Controllers\\AssignController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC8AAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T07:59:13.846Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "AssignVM.cs",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Models\\AssignVM.cs",
-              "RelativeDocumentMoniker": "PsyConnect\\Models\\AssignVM.cs",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Models\\AssignVM.cs",
-              "RelativeToolTip": "PsyConnect\\Models\\AssignVM.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T07:54:07.729Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Roles\\Create.cshtml",
-              "RelativeDocumentMoniker": "PsyConnect\\Views\\Roles\\Create.cshtml",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Roles\\Create.cshtml",
-              "RelativeToolTip": "PsyConnect\\Views\\Roles\\Create.cshtml",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAkwBkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-21T07:26:26.102Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "RoleVM.cs",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Models\\RoleVM.cs",
-              "RelativeDocumentMoniker": "PsyConnect\\Models\\RoleVM.cs",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Models\\RoleVM.cs",
-              "RelativeToolTip": "PsyConnect\\Models\\RoleVM.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T19:26:13.721Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "RolesController.cs",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Controllers\\RolesController.cs",
-              "RelativeDocumentMoniker": "PsyConnect\\Controllers\\RolesController.cs",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Controllers\\RolesController.cs",
-              "RelativeToolTip": "PsyConnect\\Controllers\\RolesController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T19:25:04.515Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Roles\\Index.cshtml",
-              "RelativeDocumentMoniker": "PsyConnect\\Views\\Roles\\Index.cshtml",
-              "ToolTip": "C:\\Users\\alial\\source\\repos\\PsyConnect\\PsyConnect\\Views\\Roles\\Index.cshtml",
-              "RelativeToolTip": "PsyConnect\\Views\\Roles\\Index.cshtml",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAkwCMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-21T07:09:33.969Z"
             }
           ]
         }

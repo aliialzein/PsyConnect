@@ -12,37 +12,61 @@
     <div class="col-md-4">
         <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Number" class="control-label"></label>
-                <input asp-for="Number" class="form-control" />
-                <span asp-validation-for="Number" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
+                <select asp-for="Type" class="form-control">
+                    <option value="Onsite">Onsite</option>
+                    <option value="Online">Online</option>
+                </select>
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
+
+            <!-- DATE PICKER (name is IMPORTANT so it posts as BookingDate) -->
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
+                <label>Date</label>
+                <input id="BookingDate"
+                       name="BookingDate"
+                       class="form-control"
+                       type="date"
+                       min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                       required />
             </div>
+
+            <!-- TIME SLOTS AS BUTTONS -->
             <div class="form-group">
-                <label asp-for="dateTime" class="control-label"></label>
-                <input asp-for="dateTime" class="form-control" />
-                <span asp-validation-for="dateTime" class="text-danger"></span>
+                <label>Time</label>
+                <div id="timeSlots" class="d-flex flex-wrap gap-2">
+                    <button type="button" class="btn btn-outline-primary timeslot" data-time="09:00">9:00 am</button>
+                    <button type="button" class="btn btn-outline-primary timeslot" data-time="10:00">10:00 am</button>
+                    <button type="button" class="btn btn-outline-primary timeslot" data-time="11:00">11:00 am</button>
+                    <button type="button" class="btn btn-outline-primary timeslot" data-time="12:00">12:00 pm</button>
+                    <button type="button" class="btn btn-outline-primary timeslot" data-time="14:00">2:00 pm</button>
+                    <button type="button" class="btn btn-outline-primary timeslot" data-time="15:00">3:00 pm</button>
+                    <button type="button" class="btn btn-outline-primary timeslot" data-time="16:00">4:00 pm</button>
+                    <button type="button" class="btn btn-outline-primary timeslot" data-time="17:00">5:00 pm</button>
+                </div>
             </div>
-            <div class="form-group">
+
+            <!-- Hidden field for SELECTED TIME ONLY -->
+            <input type="hidden" id="SelectedTime" name="SelectedTime" />
+
+            <!-- Validation message for final combined dateTime -->
+            <span asp-validation-for="dateTime" class="text-danger"></span>
+
+            <div class="form-group mt-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -54,5 +78,47 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+            const dateInput = document.getElementById("BookingDate");
+            const selectedTimeInput = document.getElementById("SelectedTime");
+            const errorSpan = document.querySelector('[data-valmsg-for="dateTime"]');
+
+            let selectedTime = null;
+
+            // Handle timeslot button click
+            document.querySelectorAll(".timeslot").forEach(btn => {
+                btn.addEventListener("click", function () {
+                    // remove active style from others
+                    document.querySelectorAll(".timeslot").forEach(b => {
+                        b.classList.remove("btn-primary", "text-white");
+                        b.classList.add("btn-outline-primary");
+                    });
+
+                    // set active on clicked
+                    this.classList.remove("btn-outline-primary");
+                    this.classList.add("btn-primary", "text-white");
+
+                    selectedTime = this.getAttribute("data-time");
+                    selectedTimeInput.value = selectedTime;
+
+                    if (errorSpan) errorSpan.textContent = "";
+                });
+            });
+
+            form.addEventListener("submit", function (e) {
+                if (!dateInput.value || !selectedTimeInput.value) {
+                    e.preventDefault();
+                    if (errorSpan) {
+                        errorSpan.textContent = "Please select a date and a time slot.";
+                    }
+                }
+            });
+        });
+    </script>
 }
