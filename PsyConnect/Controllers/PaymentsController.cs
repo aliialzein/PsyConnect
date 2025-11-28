@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PsyConnect.Data;
+using PsyConnect.Filters;
 using PsyConnect.Models;
 using Stripe.Checkout;
 
@@ -130,6 +131,7 @@ namespace PsyConnect.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ServiceFilter(typeof(BookingEmailFilter))]
         public async Task<IActionResult> DummyConfirm(int id)
         {
             var payment = await _context.Payments.FindAsync(id);
@@ -219,6 +221,7 @@ namespace PsyConnect.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(BookingEmailFilter))]
         public async Task<IActionResult> StripeSuccess(int paymentId)
         {
             var payment = await _context.Payments.FindAsync(paymentId);
