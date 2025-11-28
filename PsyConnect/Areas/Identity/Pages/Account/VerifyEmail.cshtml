@@ -1,0 +1,29 @@
+﻿@page
+@model PsyConnect.Areas.Identity.Pages.Account.VerifyEmailModel
+@{
+    ViewData["Title"] = "Verify Email";
+}
+
+<h1>Verify your email</h1>
+
+<p>
+    We sent a 6-digit verification code to
+    <strong>@Model.Input.Email</strong>.
+</p>
+
+<form method="post">
+    <input type="hidden" asp-for="Input.UserId" />
+    <input type="hidden" asp-for="Input.Email" />
+
+    <div class="form-floating mb-3">
+        <input asp-for="Input.Code" class="form-control" placeholder="123456" />
+        <label asp-for="Input.Code">Verification Code</label>
+        <span asp-validation-for="Input.Code" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Verify</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -35,5 +35,6 @@ namespace PsyConnect.Models
         public string UserId { get; set; }
 
         public IdentityUser User { get; set; }
+        public bool PatientReminderSent { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<PsyConnect.Models.Booking>
 @using System.Text.Json
+@inject PsyConnect.Data.ApplicationDbContext _db
 
 @{
     ViewData["Title"] = "Admin Dashboard";
@@ -9,11 +10,73 @@
 
     int onsite = ViewBag.OnsiteCount ?? 0;
     int online = ViewBag.OnlineCount ?? 0;
+
+    // Payments summarization
+    var now = DateTime.Now;
+    var monthStart = new DateTime(now.Year, now.Month, 1);
+    var monthEnd = monthStart.AddMonths(1);
+
+    var totalRevenue = _db.Payments.Where(p => p.Status == "Paid").Sum(p => (decimal?)p.Amount) ?? 0;
+    var revenueThisMonth = _db.Payments
+        .Where(p => p.Status == "Paid" && p.CreatedAt >= monthStart && p.CreatedAt < monthEnd)
+        .Sum(p => (decimal?)p.Amount) ?? 0;
+
+    var totalPayments = _db.Payments.Count();
+    var successfulPayments = _db.Payments.Count(p => p.Status == "Paid");
+    var failedPayments = _db.Payments.Count(p => p.Status == "Failed");
+    var pendingPayments = _db.Payments.Count(p => p.Status == "Pending");
 }
 
 <h2>Admin Dashboard</h2>
 
 <!-- Summary cards -->
+<div class="row mt-3">
+    <div class="col-md-3">
+        <div class="card text-center bg-light">
+            <div class="card-body">
+                <div>Total Revenue</div>
+                <h3>$@totalRevenue</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center bg-light">
+            <div class="card-body">
+                <div>Revenue This Month</div>
+                <h3>$@revenueThisMonth</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card text-center bg-light">
+            <div class="card-body">
+                <div>Successful Payments</div>
+                <h3>@successfulPayments</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card text-center bg-light">
+            <div class="card-body">
+                <div>Failed Payments</div>
+                <h3>@failedPayments</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card text-center bg-light">
+            <div class="card-body">
+                <div>Pending Payments</div>
+                <h3>@pendingPayments</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row mt-3">
     <div class="col-md-2">
         <div class="card text-center">
@@ -135,33 +198,70 @@
         const weeklyLabels = @Html.Raw(JsonSerializer.Serialize(weeklyLabels));
         const weeklyValues = @Html.Raw(JsonSerializer.Serialize(weeklyValues));
 
-        const ctxWeekly = document.getElementById('weeklyChart');
-        new Chart(ctxWeekly, {
-            type: 'bar',
-            data: {
-                labels: weeklyLabels,
-                datasets: [{
-                    label: 'Bookings',
-                    data: weeklyValues
-                }]
-            }
-        });
+        // WEEKLY BOOKINGS CHART
+        const weeklyCanvas = document.getElementById('weeklyChart');
+        if (weeklyCanvas) {
+            new Chart(weeklyCanvas, {
+                type: 'bar',
+                data: {
+                    labels: weeklyLabels,
+                    datasets: [{
+                        label: 'Bookings',
+                        data: weeklyValues
+                    }]
+                }
+            });
+        }
 
-        const ctxType = document.getElementById('typeChart');
-        new Chart(ctxType, {
-            type: 'doughnut',
-            data: {
-                labels: ['Onsite', 'Online'],
-                datasets: [{
-                    data: [@onsite, @online]
-                }]
-            }
-        });
+        // ONSITE VS ONLINE CHART
+        const typeCanvas = document.getElementById('typeChart');
+        if (typeCanvas) {
+            new Chart(typeCanvas, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Onsite', 'Online'],
+                    datasets: [{
+                        data: [@onsite, @online]
+                    }]
+                }
+            });
+        }
+
+        // ===== Revenue chart =====
+        const revenueCanvas = document.getElementById('revenueChart');
+        if (revenueCanvas) {
+            new Chart(revenueCanvas, {
+                type: 'bar',
+                data: {
+                    labels: ['Revenue'],
+                    datasets: [{
+                        label: 'This Month',
+                        data: [@revenueThisMonth],
+                    }]
+                }
+            });
+        }
+
+        // ===== Payment status chart =====
+        const paymentCanvas = document.getElementById('paymentChart');
+        if (paymentCanvas) {
+            new Chart(paymentCanvas, {
+                type: 'pie',
+                data: {
+                    labels: ['Paid', 'Failed', 'Pending'],
+                    datasets: [{
+                        data: [@successfulPayments, @failedPayments, @pendingPayments]
+                    }]
+                }
+            });
+        }
 
         // ====== FullCalendar for Admin ======
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('adminCalendar');
             var statusSelect = document.getElementById('adminStatusFilter');
+
+            if (!calendarEl) return; // Safety-check
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -198,5 +298,6 @@
                 calendar.refetchEvents();
             });
         });
+
     </script>
 }

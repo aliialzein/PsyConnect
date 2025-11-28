@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PsyConnect.Data;
+using PsyConnect.Filters;
 using PsyConnect.Models;
 
 namespace PsyConnect.Controllers
@@ -110,6 +111,7 @@ namespace PsyConnect.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Patient")]
+        [ServiceFilter(typeof(BookingEmailFilter))]
         public async Task<IActionResult> Create(
             [Bind("Title,Description,Type")] Booking booking,
             DateTime BookingDate,
@@ -199,6 +201,7 @@ namespace PsyConnect.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Patient")]
+        [ServiceFilter(typeof(BookingEmailFilter))]
         public async Task<IActionResult> Edit(
             int id,
             [Bind("Id,Title,Description,Type")] Booking formModel,
@@ -220,13 +223,20 @@ namespace PsyConnect.Controllers
             if (!isAdmin && booking.UserId != userId)
                 return Forbid();
 
-            // NOTE: we do NOT use ModelState.IsValid here – we validate manually
-            // to stay fully parallel with Create.
+            var today = DateTime.Today;
 
-            // ---------- SAME DATE/TIME LOGIC AS CREATE ----------
+            if (booking.Status == "InProgress" ||
+                booking.Status == "Completed" ||
+                (booking.Status == "Pending" && booking.dateTime.Date == today))
+                return Forbid();
+            
 
-            // Basic check: date + time required
-            if (BookingDate == default || string.IsNullOrWhiteSpace(SelectedTime))
+
+
+                // ---------- SAME DATE/TIME LOGIC AS CREATE ----------
+
+                // Basic check: date + time required
+                if (BookingDate == default || string.IsNullOrWhiteSpace(SelectedTime))
             {
                 ModelState.AddModelError("dateTime", "Please select a date and a time slot.");
                 return View(booking);
@@ -271,7 +281,6 @@ namespace PsyConnect.Controllers
             }
 
             // ---------- APPLY CHANGES ----------
-
             booking.Title = formModel.Title;
             booking.Description = formModel.Description;
             booking.Type = formModel.Type;
@@ -279,18 +288,10 @@ namespace PsyConnect.Controllers
             // UserId + Number stay as they are (session count)
             booking.dateTime = dateValue;
 
-            // Status is NOT changed here; Index() recalculates it using UpdateBookingStatus
-
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
-
-
-
-
-
-
 
         // GET: Bookings/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -343,7 +344,7 @@ namespace PsyConnect.Controllers
                 {
                     id = b.Id,
                     title = b.Title + " - " + (b.User != null ? b.User.Email : ""),
-                    start = b.dateTime.ToString("o"), // ISO 8601
+                    start = b.dateTime.ToString("o"),
                     extendedProps = new
                     {
                         type = b.Type,

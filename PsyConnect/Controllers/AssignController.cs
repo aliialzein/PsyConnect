@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PsyConnect.Models;
+using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace PsyConnect.Controllers
 {
@@ -20,7 +23,7 @@ namespace PsyConnect.Controllers
         // GET: AssignController
         public ActionResult Index()
         {
-            return View();
+            return View(new List<AssignVM>());
         }
 
         // GET: AssignController/Details/5
@@ -44,18 +47,44 @@ namespace PsyConnect.Controllers
         {
             try
             {
-                var UserId = collection["User"];
-                var RoleId = collection["Role"];
-                IdentityUser selectedUser = await _userManager.FindByIdAsync(UserId);
-                IdentityRole selectedRole = await _roleManager.FindByIdAsync(RoleId);
+                var userId = collection["User"];
+                var roleId = collection["Role"];
+
+                // 1. Get user and role
+                IdentityUser selectedUser = await _userManager.FindByIdAsync(userId);
+                IdentityRole selectedRole = await _roleManager.FindByIdAsync(roleId);
+
+                if (selectedUser == null || selectedRole == null)
+                {
+                    // Rebuild dropdowns if something went wrong
+                    ViewBag.UserList = new SelectList(_userManager.Users.ToList(), "Id", "UserName");
+                    ViewBag.RolesList = new SelectList(_roleManager.Roles.ToList(), "Id", "Name");
+                    ModelState.AddModelError("", "User or role not found.");
+                    return View();
+                }
+
+                // 2. Remove ALL existing roles from this user
+                var currentRoles = await _userManager.GetRolesAsync(selectedUser);
+                if (currentRoles.Any())
+                {
+                    await _userManager.RemoveFromRolesAsync(selectedUser, currentRoles);
+                }
+
+                // 3. Add the newly selected role
                 await _userManager.AddToRoleAsync(selectedUser, selectedRole.Name);
+
+                TempData["Message"] = "Role updated successfully.";
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                // Rebuild dropdowns on error so the view still works
+                ViewBag.UserList = new SelectList(_userManager.Users.ToList(), "Id", "UserName");
+                ViewBag.RolesList = new SelectList(_roleManager.Roles.ToList(), "Id", "Name");
                 return View();
             }
         }
+
 
         // GET: AssignController/Edit/5
         public ActionResult Edit(int id)

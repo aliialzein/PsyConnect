@@ -1,0 +1,19 @@
+﻿@model PsyConnect.Models.Payment
+
+@{
+    ViewData["Title"] = "Payment Successful";
+}
+
+<h2>Payment Successful</h2>
+
+<p>Your payment was completed and your booking has been created.</p>
+
+<p>
+    <strong>Title:</strong> @Model.BookingTitle<br />
+    <strong>Date &amp; Time:</strong> @Model.BookingDateTime<br />
+    <strong>Amount:</strong> @Model.Amount.ToString("0.00") $
+</p>
+
+<a asp-controller="Bookings" asp-action="Index" class="btn btn-primary mt-3">
+    Go to My Bookings
+</a>
