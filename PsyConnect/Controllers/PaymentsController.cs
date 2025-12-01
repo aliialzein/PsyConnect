@@ -13,6 +13,8 @@ namespace PsyConnect.Controllers
     [Authorize(Roles = "Patient")]
     public class PaymentsController : Controller
     {
+        private readonly ZoomService _zoom;
+
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly StripeSettings _stripeSettings;
@@ -20,12 +22,15 @@ namespace PsyConnect.Controllers
         public PaymentsController(
             ApplicationDbContext context,
             UserManager<IdentityUser> userManager,
-            IOptions<StripeSettings> stripeOptions)
+            IOptions<StripeSettings> stripeOptions,
+            ZoomService zoom)
         {
             _context = context;
             _userManager = userManager;
             _stripeSettings = stripeOptions.Value;
+            _zoom = zoom;
         }
+
 
         // STEP 1: called from Booking Create form instead of BookingsController.Create
         [HttpPost]
@@ -170,10 +175,20 @@ namespace PsyConnect.Controllers
                 Status = "Pending"
             };
 
+            // ✅ CREATE ZOOM MEETING ONLY IF ONLINE
+            if (booking.Type == "Online")
+            {
+                booking.MeetingLink = await _zoom.CreateMeetingAsync(
+                    booking.Title,
+                    booking.dateTime
+                );
+            }
+
             _context.Bookings.Add(booking);
             payment.Status = "Paid";
 
             await _context.SaveChangesAsync();
+
 
             return RedirectToAction("Index", "Bookings");
         }
@@ -261,6 +276,15 @@ namespace PsyConnect.Controllers
 
             _context.Bookings.Add(booking);
             payment.Status = "Paid";
+
+            // ✅ CREATE ZOOM IF ONLINE
+            if (booking.Type == "Online")
+            {
+                booking.MeetingLink = await _zoom.CreateMeetingAsync(
+                    booking.Title,
+                    booking.dateTime
+                );
+            }
 
             await _context.SaveChangesAsync();
 

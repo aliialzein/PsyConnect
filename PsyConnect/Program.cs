@@ -33,6 +33,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+builder.Services.Configure<ZoomSettings>(
+    builder.Configuration.GetSection("Zoom"));
+
+builder.Services.AddHttpClient<ZoomService>();
+
+
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;

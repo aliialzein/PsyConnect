@@ -22,6 +22,7 @@ namespace PsyConnect.Models
         [Required]
         [RegularExpression("Onsite|Online", ErrorMessage = "Type must be Onsite or Online.")]
         public string Type { get; set; }
+        public string? MeetingLink { get; set; }
 
         // Status controlled by system, not user
         [Required]
