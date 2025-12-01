@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using PsyConnect.Data;
 using PsyConnect.Filters;
 using PsyConnect.Models;
+using PsyConnect.Services;
+using PsyConnect.ViewModels;
 
 namespace PsyConnect.Controllers
 {
@@ -13,73 +15,61 @@ namespace PsyConnect.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IBookingStatusService _bookingStatusService;
 
         public BookingsController(
             ApplicationDbContext context,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IBookingStatusService bookingStatusService)
         {
             _context = context;
             _userManager = userManager;
+            _bookingStatusService = bookingStatusService;
         }
 
         // GET: Bookings
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
+            // 1) Build base query depending on role
+            IQueryable<Booking> query;
+
             if (User.IsInRole("Admin"))
             {
-                var allBookings = await _context.Bookings
+                query = _context.Bookings
                     .Include(b => b.User)
-                    .ToListAsync();
-
-                foreach (var b in allBookings)
-                {
-                    UpdateBookingStatus(b);
-                }
-                await _context.SaveChangesAsync();
-
-                return View(allBookings);
-            }
-
-            var userId = _userManager.GetUserId(User);
-
-            var myBookings = await _context.Bookings
-                .Where(b => b.UserId == userId)
-                .ToListAsync();
-
-            foreach (var b in myBookings)
-            {
-                UpdateBookingStatus(b);
-            }
-            await _context.SaveChangesAsync();
-
-            return View(myBookings);
-        }
-        private void UpdateBookingStatus(Booking booking)
-        {
-            var now = DateTime.Now;
-            var sessionDuration = TimeSpan.FromMinutes(50);
-
-            // If you want to treat the default 0001-01-01 as "not scheduled"
-            if (booking.dateTime == default)
-            {
-                booking.Status = "Pending";
-                return;
-            }
-
-            var start = booking.dateTime;
-
-            if (start > now)
-            {
-                booking.Status = "Pending";
-            }
-            else if (start <= now && start.Add(sessionDuration) > now)
-            {
-                booking.Status = "InProgress";
+                    .OrderByDescending(b => b.dateTime);
             }
             else
             {
-                booking.Status = "Completed";
+                var userId = _userManager.GetUserId(User);
+
+                query = _context.Bookings
+                    .Where(b => b.UserId == userId)
+                    .OrderByDescending(b => b.dateTime);
             }
+
+            // 2) Load all matching bookings (to reuse your status update logic)
+            var allBookings = await query.ToListAsync();
+
+            _bookingStatusService.UpdateStatus(allBookings);
+            await _context.SaveChangesAsync();
+
+            // 3) Apply pagination in memory
+            var totalItems = allBookings.Count;
+
+            var bookingsPage = allBookings
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var vm = new BookingIndexVM
+            {
+                Bookings = bookingsPage,
+                PageNumber = pageNumber,
+                TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
+            };
+
+            return View(vm);
         }
 
         // GET: Bookings/Details/5

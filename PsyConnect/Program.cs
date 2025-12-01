@@ -20,6 +20,7 @@ builder.Services.Configure<SmtpSettings>(
 // Filters
 builder.Services.AddScoped<BookingEmailFilter>();
 builder.Services.AddHostedService<BookingReminderService>();
+builder.Services.AddScoped<IBookingStatusService, BookingStatusService>();
 
 // MVC
 builder.Services.AddControllersWithViews();

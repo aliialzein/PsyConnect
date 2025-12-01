@@ -7,16 +7,19 @@ using PsyConnect.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using PsyConnect.Services;
 
 public class HomeController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IBookingStatusService _bookingStatusService;
 
-    public HomeController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+    public HomeController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IBookingStatusService bookingStatusService)
     {
         _context = context;
         _userManager = userManager;
+        _bookingStatusService = bookingStatusService;
     }
 
     // ====================== HOME ROUTING ======================
@@ -43,6 +46,9 @@ public class HomeController : Controller
         var endWeek = startToday.AddDays(7);
 
         var bookingsQuery = _context.Bookings.Include(b => b.User);
+
+        _bookingStatusService.UpdateStatus(bookingsQuery);
+        await _context.SaveChangesAsync();
 
         // KPIs
         ViewBag.TotalBookings = await bookingsQuery.CountAsync();
@@ -89,6 +95,8 @@ public class HomeController : Controller
         var today = DateTime.Today;
 
         var myBookings = _context.Bookings.Where(b => b.UserId == userId);
+        _bookingStatusService.UpdateStatus(myBookings);
+        await _context.SaveChangesAsync();
 
         ViewBag.TotalMyBookings = await myBookings.CountAsync();
         ViewBag.UpcomingMyBookings = await myBookings.CountAsync(b => b.dateTime >= today);

@@ -4,7 +4,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,9 +11,10 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
     <style>
-        /* Better navbar */
         .navbar-brand {
             font-weight: 700;
             font-size: 1.4rem;
@@ -29,88 +29,87 @@
     </style>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-                <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+            <div class="container">
 
-                    <!-- Logo -->
-                    <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
-                        PsyConnect
-                    </a>
+                <!-- Logo -->
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    PsyConnect
+                </a>
 
-                    <!-- Mobile toggle -->
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#mainNavbar" aria-controls="mainNavbar"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                <!-- Mobile toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar" aria-controls="mainNavbar"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                    <div class="collapse navbar-collapse" id="mainNavbar">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                            <!-- PUBLIC LINKS -->
+                        <!-- PUBLIC LINKS -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+
+                        @* PATIENT NAV *@
+                        @if (User.IsInRole("Patient"))
+                        {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link" asp-controller="Bookings" asp-action="Index">My Bookings</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link" asp-controller="Payments" asp-action="ChooseMethod">Payments</a>
+                            </li>
+                        }
+
+                        @* ADMIN NAV *@
+                        @if (User.IsInRole("Admin"))
+                        {
+                            @*<li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="AdminDashboard">Dashboard</a>
+                            </li>*@
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Bookings" asp-action="Index">Bookings</a>
                             </li>
 
-                            @* PATIENT NAV *@
-                            @if (User.IsInRole("Patient"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Bookings" asp-action="Index">My Bookings</a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Roles" asp-action="Index">Roles</a>
+                            </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Payments" asp-action="ChooseMethod">Payments</a>
-                                </li>
-                            }
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Assign" asp-action="Index">Assign</a>
+                            </li>
+                        }
+                    </ul>
 
-                            @* ADMIN NAV *@
-                            @if (User.IsInRole("Admin"))
-                            {
-                                @* <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Home" asp-action="AdminDashboard">Dashboard</a>
-                                </li> *@
-
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Bookings" asp-action="Index">Bookings</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Roles" asp-action="Index">Roles</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Assign" asp-action="Index">Assign</a>
-                                </li>
-                            }
-                        </ul>
-
-                        <!-- Login / Logout Section -->
-                        <partial name="_LoginPartial" />
-                    </div>
-
+                    <!-- Login / Logout Section -->
+                    <partial name="_LoginPartial" />
                 </div>
-            </nav>
-        </header>
+
+            </div>
+        </nav>
     </header>
 
-    <div class="container mt-4">
-        @RenderBody()
-    </div>
+    <main role="main" class="flex-shrink-0">
+        <div class="container mt-4">
+            @RenderBody()
+        </div>
+    </main>
 
-    <footer class="py-3 text-center text-muted border-top mt-5">
-        <p>&copy; 2025 - PsyConnect</p>
+    <footer class="py-3 text-center text-muted border-top mt-auto">
+        <p class="mb-0">&copy; @DateTime.Now.Year - PsyConnect</p>
     </footer>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

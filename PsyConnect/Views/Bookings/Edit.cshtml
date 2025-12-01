@@ -1,94 +1,97 @@
 ﻿@model PsyConnect.Models.Booking
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Booking";
 }
 
-<h1>Edit</h1>
-
-<h4>Booking</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <input type="hidden" asp-for="Id" />
-
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h1 class="h5 mb-0">Edit Booking</h1>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Type" class="form-label"></label>
+                        <select asp-for="Type" class="form-select">
+                            <option value="Onsite">Onsite</option>
+                            <option value="Online">Online</option>
+                        </select>
+                        <span asp-validation-for="Type" class="text-danger"></span>
+                    </div>
+
+                    <!-- Read-only session number & status -->
+                    <div class="mb-3">
+                        <label class="form-label">Session #</label>
+                        <p class="form-control-plaintext">@Model.Number</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <p class="form-control-plaintext">@Model.Status</p>
+                    </div>
+
+                    <!-- DATE -->
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <input id="BookingDate"
+                               name="BookingDate"
+                               class="form-control"
+                               type="date"
+                               value="@Model.dateTime.ToString("yyyy-MM-dd")"
+                               min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                               required />
+                    </div>
+
+                    <!-- TIME SLOTS -->
+                    <div class="mb-3">
+                        <label class="form-label">Time</label>
+                        <div id="timeSlots" class="d-flex flex-wrap gap-2">
+                            <button type="button" class="btn btn-outline-primary timeslot" data-time="09:00">9:00 am</button>
+                            <button type="button" class="btn btn-outline-primary timeslot" data-time="10:00">10:00 am</button>
+                            <button type="button" class="btn btn-outline-primary timeslot" data-time="11:00">11:00 am</button>
+                            <button type="button" class="btn btn-outline-primary timeslot" data-time="12:00">12:00 pm</button>
+                            <button type="button" class="btn btn-outline-primary timeslot" data-time="14:00">2:00 pm</button>
+                            <button type="button" class="btn btn-outline-primary timeslot" data-time="15:00">3:00 pm</button>
+                            <button type="button" class="btn btn-outline-primary timeslot" data-time="16:00">4:00 pm</button>
+                            <button type="button" class="btn btn-outline-primary timeslot" data-time="17:00">5:00 pm</button>
+                        </div>
+                    </div>
+
+                    <!-- Hidden selected time -->
+                    <input type="hidden" id="SelectedTime" name="SelectedTime" />
+
+                    <!-- Errors for final date/time -->
+                    <div class="mb-3">
+                        <span asp-validation-for="dateTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                <select asp-for="Type" class="form-control">
-                    <option value="Onsite">Onsite</option>
-                    <option value="Online">Online</option>
-                </select>
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
-
-            <!-- Read-only session number & status -->
-            <div class="form-group">
-                <label>Session #</label>
-                <p class="form-control-plaintext">@Model.Number</p>
-            </div>
-
-            <div class="form-group">
-                <label>Status</label>
-                <p class="form-control-plaintext">@Model.Status</p>
-            </div>
-
-            <!-- DATE -->
-            <div class="form-group">
-                <label>Date</label>
-                <input id="BookingDate"
-                       name="BookingDate"
-                       class="form-control"
-                       type="date"
-                       value="@Model.dateTime.ToString("yyyy-MM-dd")"
-                       min="@DateTime.Today.ToString("yyyy-MM-dd")"
-                       required />
-            </div>
-
-            <!-- TIME SLOTS -->
-            <div class="form-group">
-                <label>Time</label>
-                <div id="timeSlots" class="d-flex flex-wrap gap-2">
-                    <button type="button" class="btn btn-outline-primary timeslot" data-time="09:00">9:00 am</button>
-                    <button type="button" class="btn btn-outline-primary timeslot" data-time="10:00">10:00 am</button>
-                    <button type="button" class="btn btn-outline-primary timeslot" data-time="11:00">11:00 am</button>
-                    <button type="button" class="btn btn-outline-primary timeslot" data-time="12:00">12:00 pm</button>
-                    <button type="button" class="btn btn-outline-primary timeslot" data-time="14:00">2:00 pm</button>
-                    <button type="button" class="btn btn-outline-primary timeslot" data-time="15:00">3:00 pm</button>
-                    <button type="button" class="btn btn-outline-primary timeslot" data-time="16:00">4:00 pm</button>
-                    <button type="button" class="btn btn-outline-primary timeslot" data-time="17:00">5:00 pm</button>
-                </div>
-            </div>
-
-            <!-- Hidden selected time -->
-            <input type="hidden" id="SelectedTime" name="SelectedTime" />
-
-            <!-- Where we show errors about final date/time -->
-            <span asp-validation-for="dateTime" class="text-danger"></span>
-
-            <div class="form-group mt-3">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
@@ -143,3 +146,4 @@
         });
     </script>
 }
+
