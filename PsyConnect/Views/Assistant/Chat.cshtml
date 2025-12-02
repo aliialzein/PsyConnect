@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "PsyConnect Assistant";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+
+        <!-- Sticky safety banner -->
+        <div class="alert alert-warning sticky-top mb-3 small" style="z-index: 1020;">
+            <strong>Important:</strong>
+            PsyConnect Assistant gives only general, educational information about psychotherapy and this platform.
+            It is <strong>not</strong> a therapist, does <strong>not</strong> provide diagnoses, and is <strong>not</strong> for emergencies or crisis situations.
+            In an emergency, contact local emergency services or a trusted professional immediately.
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">PsyConnect Assistant</h5>
+            </div>
+            <div class="card-body d-flex flex-column" style="height: 60vh;">
+                <div id="chatWindow" class="flex-grow-1 border rounded p-2 mb-3 overflow-auto bg-light">
+                    <div class="text-muted small">
+                        This assistant provides general information about psychotherapy and this platform.
+                        It is not a therapist and not for emergencies.
+                    </div>
+                </div>
+
+                <form id="chatForm" class="d-flex gap-2">
+                    <input type="text" id="userMessage" class="form-control"
+                           placeholder="Ask a question about psychotherapy..." autocomplete="off" />
+                    <button type="submit" class="btn btn-primary">
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const chatForm = document.getElementById("chatForm");
+        const userMessageInput = document.getElementById("userMessage");
+        const chatWindow = document.getElementById("chatWindow");
+
+        chatForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const text = userMessageInput.value.trim();
+            if (!text) return;
+
+            // optional: basic length guard
+            if (text.length > 500) {
+                appendMessage("Assistant",
+                    "Your question is a bit long. Please shorten it to a few sentences so I can help better.\n" +
+                    "This is general information, not a diagnosis or emergency service.",
+                    "text-start text-muted");
+                return;
+            }
+
+            appendMessage("You", text, "text-end");
+            userMessageInput.value = "";
+
+            appendMessage("Assistant", "Thinking...", "text-start text-muted temp-msg");
+
+            try {
+                const response = await fetch("@Url.Action("Ask", "Assistant")", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+                    },
+                    body: new URLSearchParams({ message: text })
+                });
+
+                const temp = chatWindow.querySelector(".temp-msg");
+                if (temp) temp.remove();
+
+                if (!response.ok) {
+                    appendMessage("Assistant", "Error processing your request.", "text-start text-danger");
+                    return;
+                }
+
+                const data = await response.json();
+                appendMessage("Assistant", data.reply, "text-start");
+            } catch (err) {
+                const temp = chatWindow.querySelector(".temp-msg");
+                if (temp) temp.remove();
+                appendMessage("Assistant", "Network error.", "text-start text-danger");
+            }
+        });
+
+        function appendMessage(sender, text, extraClass) {
+            const div = document.createElement("div");
+            div.className = "mb-2 " + (extraClass || "");
+            div.innerHTML = `<strong>${sender}:</strong> ${text.replace(/\n/g, "<br>")}`;
+            chatWindow.appendChild(div);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+    </script>
+}

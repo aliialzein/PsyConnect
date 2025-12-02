@@ -21,6 +21,7 @@ builder.Services.Configure<SmtpSettings>(
 builder.Services.AddScoped<BookingEmailFilter>();
 builder.Services.AddHostedService<BookingReminderService>();
 builder.Services.AddScoped<IBookingStatusService, BookingStatusService>();
+builder.Services.AddHttpClient<IChatbotService, ChatbotService>();
 
 // MVC
 builder.Services.AddControllersWithViews();
