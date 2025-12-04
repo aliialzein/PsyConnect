@@ -40,6 +40,7 @@ builder.Services.Configure<ZoomSettings>(
 
 builder.Services.AddHttpClient<ZoomService>();
 
+builder.Services.AddHttpClient<AISummaryService>();
 
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -58,6 +59,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddRazorPages();
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -77,6 +79,7 @@ StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

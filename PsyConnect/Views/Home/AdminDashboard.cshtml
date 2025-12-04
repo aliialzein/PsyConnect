@@ -126,6 +126,26 @@
             </div>
         </div>
     </div>
+    <div class="card mt-4 shadow p-3">
+        <h4>AI Summary</h4>
+
+        @if (ViewBag.AISummary == null)
+        {
+            <p class="text-muted">No summary generated yet.</p>
+        }
+        else
+        {
+            <p>@ViewBag.AISummary</p>
+        }
+
+        <form method="post" asp-action="GenerateAISummary">
+            <button type="submit" class="btn btn-primary mt-2">
+                Generate Summary
+            </button>
+        </form>
+    </div>
+
+
 </div>
 
 <hr />

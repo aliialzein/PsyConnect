@@ -8,19 +8,27 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using PsyConnect.Services;
+using Microsoft.AspNetCore.Http;
 
 public class HomeController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IBookingStatusService _bookingStatusService;
+    private readonly AISummaryService _ai;
 
-    public HomeController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IBookingStatusService bookingStatusService)
+    public HomeController(
+        ApplicationDbContext context,
+        UserManager<IdentityUser> userManager,
+        IBookingStatusService bookingStatusService,
+        AISummaryService ai)
     {
         _context = context;
         _userManager = userManager;
         _bookingStatusService = bookingStatusService;
+        _ai = ai;
     }
+
 
     // ====================== HOME ROUTING ======================
     [AllowAnonymous]
@@ -80,11 +88,59 @@ public class HomeController : Controller
         ViewBag.WeeklyLabels = weeklyLabels;
         ViewBag.WeeklyValues = weeklyValues;
 
-        // Online vs Onsite
         ViewBag.OnsiteCount = await bookingsQuery.CountAsync(b => b.Type == "Onsite");
         ViewBag.OnlineCount = await bookingsQuery.CountAsync(b => b.Type == "Online");
 
+        var aiData = new
+        {
+            TotalBookings = ViewBag.TotalBookings,
+            Today = ViewBag.TodayBookings,
+            Next7Days = ViewBag.Next7DaysBookings,
+            Pending = ViewBag.PendingCount,
+            InProgress = ViewBag.InProgressCount,
+            Completed = ViewBag.CompletedCount,
+            Online = ViewBag.OnlineCount,
+            Onsite = ViewBag.OnsiteCount
+        };
+
+        ViewBag.AISummary = HttpContext.Session.GetString("AISummary");
+
+
+
         return View("AdminDashboard", upcoming);
+
+    }
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    public async Task<IActionResult> GenerateAISummary()
+    {
+        var now = DateTime.Now;
+        var startToday = now.Date;
+        var endWeek = startToday.AddDays(7);
+
+        var bookingsQuery = _context.Bookings;
+
+        var aiData = new
+        {
+            TotalBookings = await bookingsQuery.CountAsync(),
+            Today = await bookingsQuery.CountAsync(b => b.dateTime.Date == startToday),
+            Next7Days = await bookingsQuery.CountAsync(b => b.dateTime >= startToday && b.dateTime < endWeek),
+            Pending = await bookingsQuery.CountAsync(b => b.Status == "Pending"),
+            InProgress = await bookingsQuery.CountAsync(b => b.Status == "InProgress"),
+            Completed = await bookingsQuery.CountAsync(b => b.Status == "Completed"),
+            Online = await bookingsQuery.CountAsync(b => b.Type == "Online"),
+            Onsite = await bookingsQuery.CountAsync(b => b.Type == "Onsite")
+        };
+
+        var summary = await _ai.GenerateAdminSummary(aiData);
+
+        Microsoft.AspNetCore.Http.SessionExtensions.SetString(
+            HttpContext.Session,
+            "AISummary",
+            summary
+        );
+
+        return RedirectToAction("AdminDashboard");
     }
 
     // ====================== PATIENT DASHBOARD ======================
