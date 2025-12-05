@@ -10,10 +10,31 @@ namespace PsyConnect.Data
             : base(options)
         {
         }
+
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Review> Reviews { get; set; } = default!;
         public DbSet<EmailOTPCode> EmailOTPCodes { get; set; }
-        public DbSet<PsyConnect.Models.RoleVM> RoleVM { get; set; } = default!;
-        public DbSet<PsyConnect.Models.AssignVM> AssignVM { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // Booking (1) <-> (1) Review
+            builder.Entity<Booking>()
+                .HasOne(b => b.Review)
+                .WithOne(r => r.Booking)
+                .HasForeignKey<Review>(r => r.BookingId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // enforce one review per booking at DB level
+            builder.Entity<Review>()
+                .HasIndex(r => r.BookingId)
+                .IsUnique();
+
+            builder.Entity<Review>()
+                .Property(r => r.UserId)
+                .HasColumnType("nvarchar(450)");
+        }
     }
 }

@@ -121,6 +121,25 @@
         border-color: rgba(79,70,229,.20);
         color: var(--pc-primary);
     }
+
+    .pc-review-badge {
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: .78rem;
+        padding: .2rem .65rem;
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        background: rgba(34,197,94,.14);
+        color: #166534;
+        white-space: nowrap;
+    }
+
+    .pc-review-btn {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+        padding: .35rem .8rem !important;
+    }
 </style>
 
 <div class="pc-pagehead">
@@ -145,7 +164,8 @@
                     <th style="min-width:90px;">Type</th>
                     <th style="min-width:120px;">Status</th>
                     <th style="min-width:160px;">Date &amp; Time</th>
-                    <th class="text-end" style="min-width:180px;">Actions</th>
+                    <th style="min-width:160px;">Review</th>
+                    <th class="text-end" style="min-width:220px;">Actions</th>
                 </tr>
             </thead>
 
@@ -164,7 +184,8 @@
                             </td>
 
                             <td>
-                                <span class="pc-status @(item.Type == "Online" ? "pc-status-InProgress" : "pc-status-Pending")" style="background: rgba(79,70,229,.08); color: rgba(79,70,229,.95);">
+                                <span class="pc-status @(item.Type == "Online" ? "pc-status-InProgress" : "pc-status-Pending")"
+                                      style="background: rgba(79,70,229,.08); color: rgba(79,70,229,.95);">
                                     <i class="bi @(item.Type == "Online" ? "bi-camera-video" : "bi-geo-alt")"></i>
                                     @item.Type
                                 </span>
@@ -178,7 +199,28 @@
                             </td>
 
                             <td>
-                                @item.dateTime
+                                @item.dateTime.ToString("ddd dd MMM yyyy HH:mm")
+                            </td>
+
+                            <!-- REVIEW COLUMN -->
+                            <td>
+                                @if (item.Status == "Completed")
+                                {
+                                    if (item.Review == null)
+                                    {
+                                        <span class="text-muted small">Not reviewed</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="pc-review-badge">
+                                            <i class="bi bi-star-fill"></i> Reviewed
+                                        </span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">—</span>
+                                }
                             </td>
 
                             <td class="text-end pc-actions">
@@ -194,6 +236,15 @@
                                     </a>
                                 }
 
+                                @* Patient can leave review only if completed AND no review exists *@
+                                @if (User.IsInRole("Patient") && item.Status == "Completed" && item.Review == null)
+                                {
+                                    <a asp-controller="Reviews" asp-action="Create" asp-route-bookingId="@item.Id"
+                                       class="btn btn-sm btn-outline-primary me-1 pc-review-btn">
+                                        <i class="bi bi-chat-square-text me-1"></i> Leave review
+                                    </a>
+                                }
+
                                 <a asp-action="Details" asp-route-id="@item.Id"
                                    class="btn btn-sm pc-btn-primary text-white">
                                     <i class="bi bi-arrow-right-circle me-1"></i> Details
@@ -205,7 +256,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="6" class="text-center text-muted py-5">
+                        <td colspan="7" class="text-center text-muted py-5">
                             <div class="fw-bold">No bookings found</div>
                             <div class="small">Create your first booking to get started.</div>
                         </td>

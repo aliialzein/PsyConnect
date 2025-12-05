@@ -1,0 +1,80 @@
+﻿@model PsyConnect.Models.Review
+
+@{
+    ViewData["Title"] = "Leave a Review";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div>
+                        <h1 class="h5 mb-0">Leave a Review</h1>
+                        <div class="text-muted small">
+                            @if (ViewBag.BookingTitle != null)
+                            {
+                                <span class="fw-semibold">@ViewBag.BookingTitle</span>
+                                <span class="mx-1">·</span>
+                                <span>@(((DateTime)ViewBag.BookingDateTime).ToString("ddd dd MMM yyyy HH:mm"))</span>
+                            }
+                        </div>
+                    </div>
+                    <span class="badge bg-success">Completed</span>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <!-- Important: render all model errors -->
+                <div asp-validation-summary="All" class="alert alert-danger mb-3"></div>
+
+                <!-- Important: ensure it posts to POST Create AND carries bookingId -->
+                <form asp-action="Create" asp-route-bookingId="@Model.BookingId" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Important: hard set BookingId -->
+                    <input type="hidden" name="BookingId" value="@Model.BookingId" />
+
+                    <div class="mb-3">
+                        <label asp-for="Rating" class="form-label fw-semibold">Rating</label>
+                        <select asp-for="Rating" class="form-select">
+                            <option value="5">5 - Excellent</option>
+                            <option value="4">4 - Good</option>
+                            <option value="3">3 - Okay</option>
+                            <option value="2">2 - Poor</option>
+                            <option value="1">1 - Very poor</option>
+                        </select>
+                        <span asp-validation-for="Rating" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Comment" class="form-label fw-semibold">Description</label>
+                        <textarea asp-for="Comment" class="form-control" rows="4"
+                                  placeholder="Share a short note about your experience (optional)"></textarea>
+                        <span asp-validation-for="Comment" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between gap-2">
+                        <a asp-controller="Bookings" asp-action="Index" class="btn btn-outline-secondary">
+                            Back
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            Submit Review
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Debug helper (remove later) -->
+                <div class="mt-3 small text-muted">
+                    Debug: BookingId = <strong>@Model.BookingId</strong>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

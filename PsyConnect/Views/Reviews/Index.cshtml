@@ -1,0 +1,170 @@
+﻿@model IEnumerable<PsyConnect.Models.Review>
+
+@{
+    ViewData["Title"] = "Reviews (Admin)";
+}
+
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.98);
+        --pc-shadow: 0 18px 50px rgba(15,23,42,.12);
+        --pc-radius: 18px;
+    }
+
+    .pc-pagehead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    .pc-title {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 950;
+        color: var(--pc-text);
+    }
+
+    .pc-sub {
+        margin: .2rem 0 0;
+        color: var(--pc-muted);
+        font-weight: 650;
+        font-size: .92rem;
+    }
+
+    .pc-card {
+        background: var(--pc-card);
+        border: 1px solid var(--pc-border);
+        border-radius: 22px;
+        box-shadow: var(--pc-shadow);
+        overflow: hidden;
+    }
+
+    .pc-table thead th {
+        background: rgba(248,250,252,.95);
+        color: rgba(15,23,42,.78);
+        font-weight: 950;
+        font-size: .85rem;
+        border-bottom: 1px solid var(--pc-border);
+        white-space: nowrap;
+    }
+
+    .pc-table tbody td {
+        color: rgba(15,23,42,.80);
+        font-weight: 650;
+        font-size: .92rem;
+        vertical-align: middle;
+    }
+
+    .pc-stars {
+        color: rgba(234,179,8,.95);
+    }
+
+    .pc-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        padding: .22rem .65rem;
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: .78rem;
+        border: 1px solid rgba(15,23,42,.12);
+        background: rgba(79,70,229,.06);
+        color: rgba(79,70,229,.95);
+        white-space: nowrap;
+    }
+
+    .pc-action .btn {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+    }
+</style>
+
+<div class="pc-pagehead">
+    <div>
+        <h1 class="pc-title">Reviews</h1>
+        <div class="pc-sub">Admin view: browse patient feedback. (Admins can’t edit reviews.)</div>
+    </div>
+</div>
+
+<div class="pc-card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 pc-table">
+            <thead>
+                <tr>
+                    <th style="min-width:150px;">Booking</th>
+                    <th style="min-width:120px;">User</th>
+                    <th style="min-width:140px;">Rating</th>
+                    <th>Comment</th>
+                    <th style="min-width:160px;">Created</th>
+                    <th class="text-end" style="min-width:120px;">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span class="pc-pill">
+                                    <i class="bi bi-calendar2"></i>
+                                    Booking #@item.BookingId
+                                </span>
+                                <div class="text-muted small mt-1">
+                                    @(item.Booking != null ? item.Booking.Status : "—")
+                                </div>
+                            </td>
+
+                            <td class="text-truncate" style="max-width:220px;">
+                                @item.UserId
+                            </td>
+
+                            <td>
+                                <span class="pc-stars">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="bi @(i <= item.Rating ? "bi-star-fill" : "bi-star")"></i>
+                                    }
+                                </span>
+                                <span class="text-muted small ms-1">(@item.Rating/5)</span>
+                            </td>
+
+                            <td class="text-truncate" style="max-width:520px;">
+                                @(string.IsNullOrWhiteSpace(item.Comment) ? "—" : item.Comment)
+                            </td>
+
+                            <td>
+                                @item.CreatedAt.ToLocalTime().ToString("ddd dd MMM yyyy HH:mm")
+                            </td>
+
+                            <td class="text-end pc-action">
+                                <a asp-action="Details" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-primary">
+                                    Details <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-5">
+                            <div class="fw-bold">No reviews yet</div>
+                            <div class="small">Once patients complete sessions, reviews will show up here.</div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

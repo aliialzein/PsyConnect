@@ -1,0 +1,93 @@
+﻿@if (Model.Status == "Completed")
+{
+    <div class="px-4 pb-3">
+        <div class="alert mb-0" style="border-radius:16px; border:1px solid rgba(15,23,42,.10); background: rgba(248,250,252,.85);">
+            <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap">
+                <div>
+                    <div class="fw-bold mb-1">
+                        <i class="bi bi-star me-1"></i>
+                        Review
+                    </div>
+
+                    @if (Model.Review == null)
+                    {
+                        <div class="text-muted small">
+                            You can leave a review now that this session is completed.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted small">
+                            Submitted @Model.Review.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, HH:mm")
+                        </div>
+                    }
+                </div>
+
+                <span class="pc-chip pc-status-Completed">
+                    <i class="bi bi-check2-circle"></i> Completed
+                </span>
+            </div>
+
+            <hr />
+
+            @if (Model.Review == null)
+            {
+                @* Only patients can create reviews *@
+                @if (User.IsInRole("Patient"))
+                {
+                    <a asp-controller="Reviews" asp-action="Create" asp-route-bookingId="@Model.Id"
+                       class="btn pc-btn pc-btn-primary text-white">
+                        <i class="bi bi-chat-square-text me-1"></i>
+                        Leave review
+                    </a>
+                }
+                else
+                {
+                    <div class="text-muted small">Only patients can leave reviews.</div>
+                }
+            }
+            else
+            {
+                <div class="mb-2">
+                    <div class="text-muted small mb-1">Rating</div>
+                    <div class="fw-bold">
+                        <span class="text-warning" style="letter-spacing:.08em;">
+                            @(new string('★', Math.Clamp(Model.Review.Rating, 0, 5)))
+                            @(new string('☆', Math.Clamp(5 - Model.Review.Rating, 0, 5)))
+                        </span>
+                        <span class="text-muted ms-2">(@Model.Review.Rating/5)</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="text-muted small mb-1">Description</div>
+                    <div class="p-3 rounded" style="background:white; border:1px solid rgba(15,23,42,.10);">
+                        @if (!string.IsNullOrWhiteSpace(Model.Review.Comment))
+                        {
+                            @Model.Review.Comment
+                        }
+                        else
+                        {
+                            <span class="text-muted">No description provided.</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    <a asp-controller="Reviews" asp-action="Details" asp-route-id="@Model.Review.Id"
+                       class="btn btn-outline-secondary pc-btn">
+                        <i class="bi bi-eye me-1"></i> View review
+                    </a>
+
+                    @if (User.IsInRole("Patient"))
+                    {
+                        <a asp-controller="Reviews" asp-action="Edit" asp-route-id="@Model.Review.Id"
+                           class="btn pc-btn pc-btn-primary text-white">
+                            <i class="bi bi-pencil me-1"></i> Edit review
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}

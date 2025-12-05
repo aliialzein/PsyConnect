@@ -30,13 +30,13 @@ namespace PsyConnect.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
-            // 1) Build base query depending on role
             IQueryable<Booking> query;
 
             if (User.IsInRole("Admin"))
             {
                 query = _context.Bookings
                     .Include(b => b.User)
+                    .Include(b => b.Review)
                     .OrderByDescending(b => b.dateTime);
             }
             else
@@ -44,17 +44,17 @@ namespace PsyConnect.Controllers
                 var userId = _userManager.GetUserId(User);
 
                 query = _context.Bookings
-                    .Where(b => b.UserId == userId)
+                    .Where(b => b.UserId == userId)        // ✅ REQUIRED
+                    .Include(b => b.User)
+                    .Include(b => b.Review)               // ✅ so UI knows reviewed or not
                     .OrderByDescending(b => b.dateTime);
             }
 
-            // 2) Load all matching bookings (to reuse your status update logic)
             var allBookings = await query.ToListAsync();
 
             _bookingStatusService.UpdateStatus(allBookings);
             await _context.SaveChangesAsync();
 
-            // 3) Apply pagination in memory
             var totalItems = allBookings.Count;
 
             var bookingsPage = allBookings
@@ -72,23 +72,28 @@ namespace PsyConnect.Controllers
             return View(vm);
         }
 
+
         // GET: Bookings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var booking = await _context.Bookings
+                .Include(b => b.Review)
+                .Include(b => b.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (booking == null)
+
+            if (booking == null) return NotFound();
+
+            if (!User.IsInRole("Admin"))
             {
-                return NotFound();
+                var userId = _userManager.GetUserId(User);
+                if (booking.UserId != userId) return Forbid();
             }
 
             return View(booking);
         }
+
 
         // GET: Bookings/Create
         [Authorize(Roles = "Patient")]
@@ -220,8 +225,6 @@ namespace PsyConnect.Controllers
                 (booking.Status == "Pending" && booking.dateTime.Date == today))
                 return Forbid();
             
-
-
 
                 // ---------- SAME DATE/TIME LOGIC AS CREATE ----------
 

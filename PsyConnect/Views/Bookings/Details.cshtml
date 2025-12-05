@@ -142,6 +142,26 @@
             background: var(--pc-primary-700) !important;
             border-color: var(--pc-primary-700) !important;
         }
+
+    /* Review helpers */
+    .pc-review-badge {
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: .78rem;
+        padding: .2rem .65rem;
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        background: rgba(34,197,94,.14);
+        color: #166534;
+        white-space: nowrap;
+    }
+
+    .pc-review-btn {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+        padding: .35rem .8rem !important;
+    }
 </style>
 
 <div class="pc-wrap">
@@ -202,6 +222,57 @@
                         <i class="bi bi-box-arrow-up-right me-1"></i>
                         Join meeting
                     </a>
+                </div>
+            </div>
+        }
+
+        @* REVIEW SECTION *@
+        @if (Model.Status == "Completed")
+        {
+            <div class="px-4 pb-3">
+                <div style="border-radius:16px; border:1px solid rgba(15,23,42,.10); overflow:hidden;">
+                    <div class="p-3" style="background: rgba(248,250,252,.85); border-bottom:1px solid rgba(15,23,42,.10);">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div class="fw-bold">
+                                <i class="bi bi-star-fill me-1"></i> Review
+                            </div>
+
+                            @if (User.IsInRole("Patient") && Model.Review == null)
+                            {
+                                <a asp-controller="Reviews" asp-action="Create" asp-route-bookingId="@Model.Id"
+                                   class="btn btn-sm btn-outline-primary pc-review-btn">
+                                    <i class="bi bi-chat-square-text me-1"></i> Leave review
+                                </a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="p-3">
+                        @if (Model.Review == null)
+                        {
+                            <div class="text-muted">No review yet.</div>
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="pc-review-badge">
+                                    <i class="bi bi-star-fill"></i> @Model.Review.Rating/5
+                                </span>
+                                <span class="text-muted small">
+                                    @Model.Review.CreatedAt.ToLocalTime().ToString("ddd dd MMM yyyy HH:mm")
+                                </span>
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Review.Comment))
+                            {
+                                <div style="white-space:pre-wrap;">@Model.Review.Comment</div>
+                            }
+                            else
+                            {
+                                <div class="text-muted">No comment.</div>
+                            }
+                        }
+                    </div>
                 </div>
             </div>
         }
