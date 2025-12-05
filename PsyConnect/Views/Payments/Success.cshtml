@@ -4,16 +4,152 @@
     ViewData["Title"] = "Payment Successful";
 }
 
-<h2>Payment Successful</h2>
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.98);
+        --pc-shadow: 0 18px 50px rgba(15,23,42,.12);
+        --pc-radius: 18px;
+    }
 
-<p>Your payment was completed and your booking has been created.</p>
+    .pc-wrap {
+        max-width: 860px;
+        margin: 0 auto;
+    }
 
-<p>
-    <strong>Title:</strong> @Model.BookingTitle<br />
-    <strong>Date &amp; Time:</strong> @Model.BookingDateTime<br />
-    <strong>Amount:</strong> @Model.Amount.ToString("0.00") $
-</p>
+    .pc-hero {
+        border-radius: 26px;
+        border: 1px solid rgba(34,197,94,.22);
+        background: radial-gradient(900px 320px at 10% 0%, rgba(34,197,94,.18), transparent 60%), radial-gradient(900px 340px at 90% 0%, rgba(79,70,229,.12), transparent 60%), rgba(255,255,255,.92);
+        box-shadow: var(--pc-shadow);
+        padding: 1.3rem 1.2rem;
+        display: flex;
+        align-items: flex-start;
+        gap: .9rem;
+        margin-bottom: 1rem;
+    }
 
-<a asp-controller="Bookings" asp-action="Index" class="btn btn-primary mt-3">
-    Go to My Bookings
-</a>
+    .pc-check {
+        width: 46px;
+        height: 46px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        background: rgba(34,197,94,.14);
+        color: #166534;
+        border: 1px solid rgba(34,197,94,.22);
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    .pc-title {
+        margin: 0;
+        font-weight: 950;
+        color: var(--pc-text);
+        font-size: 1.35rem;
+    }
+
+    .pc-sub {
+        margin: .25rem 0 0;
+        color: var(--pc-muted);
+        font-weight: 650;
+    }
+
+    .pc-card {
+        background: var(--pc-card);
+        border: 1px solid var(--pc-border);
+        border-radius: 22px;
+        box-shadow: var(--pc-shadow);
+        padding: 1.1rem;
+    }
+
+    .pc-field {
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(248,250,252,.85);
+        border-radius: 16px;
+        padding: .85rem .9rem;
+    }
+
+        .pc-field label {
+            display: block;
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: .10em;
+            color: rgba(100,116,139,.95);
+            font-weight: 900;
+            margin-bottom: .25rem;
+        }
+
+        .pc-field div {
+            color: rgba(15,23,42,.86);
+            font-weight: 700;
+        }
+
+    .pc-btn {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+        padding: .65rem 1rem !important;
+        background: var(--pc-primary) !important;
+        border-color: var(--pc-primary) !important;
+    }
+
+        .pc-btn:hover {
+            background: var(--pc-primary-700) !important;
+            border-color: var(--pc-primary-700) !important;
+        }
+</style>
+
+<div class="pc-wrap">
+    <div class="pc-hero">
+        <div class="pc-check"><i class="bi bi-check2-circle"></i></div>
+        <div>
+            <h2 class="pc-title">Payment successful</h2>
+            <p class="pc-sub mb-0">Your payment was completed and your booking has been created.</p>
+        </div>
+    </div>
+
+    <div class="pc-card">
+        <h4 class="fw-bold mb-3" style="color: var(--pc-text);">Session summary</h4>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="pc-field">
+                    <label>Title</label>
+                    <div>@Model.BookingTitle</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="pc-field">
+                    <label>Date &amp; time</label>
+                    <div>@Model.BookingDateTime</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="pc-field">
+                    <label>Amount</label>
+                    <div>@Model.Amount.ToString("0.00") $</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="pc-field">
+                    <label>Status</label>
+                    <div>Confirmed</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a asp-controller="Bookings" asp-action="Index" class="btn pc-btn text-white">
+                <i class="bi bi-calendar2-check me-1"></i>
+                Go to my bookings
+            </a>
+        </div>
+    </div>
+</div>

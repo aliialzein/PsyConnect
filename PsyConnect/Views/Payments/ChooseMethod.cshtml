@@ -4,28 +4,208 @@
     ViewData["Title"] = "Choose Payment Method";
 }
 
-<h2>Choose Payment Method</h2>
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.98);
+        --pc-shadow: 0 18px 50px rgba(15,23,42,.12);
+        --pc-radius: 18px;
+    }
 
-<div class="card p-3 mb-3">
-    <h4>Session Summary</h4>
-    <p><strong>Title:</strong> @Model.BookingTitle</p>
-    <p><strong>Type:</strong> @Model.BookingType</p>
-    <p><strong>Date &amp; Time:</strong> @Model.BookingDateTime</p>
-    <p><strong>Amount:</strong> @Model.Amount.ToString("0.00") $</p>
-</div>
+    .pc-wrap {
+        max-width: 960px;
+        margin: 0 auto;
+    }
 
-<div class="d-flex gap-3">
-    <form asp-action="StripeCheckout" method="post">
-        <input type="hidden" name="id" value="@Model.Id" />
-        <button type="submit" class="btn btn-primary">Pay with Card (Stripe)</button>
-    </form>
+    .pc-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
 
-    <form asp-action="DummyCheckout" method="get">
-        <input type="hidden" name="id" value="@Model.Id" />
-        <button type="submit" class="btn btn-secondary">Pay with Dummy Method</button>
-    </form>
-</div>
+    .pc-title {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 950;
+        color: var(--pc-text);
+    }
 
-<div class="mt-3">
-    <a asp-controller="Bookings" asp-action="Create" class="btn btn-link">Cancel and go back</a>
+    .pc-sub {
+        margin: .2rem 0 0;
+        color: var(--pc-muted);
+        font-weight: 650;
+        font-size: .92rem;
+    }
+
+    .pc-card {
+        background: var(--pc-card);
+        border: 1px solid var(--pc-border);
+        border-radius: 22px;
+        box-shadow: var(--pc-shadow);
+        overflow: hidden;
+    }
+
+    .pc-card-pad {
+        padding: 1.1rem;
+    }
+
+    .pc-summary {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .9rem;
+    }
+
+    .pc-field {
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(248,250,252,.85);
+        border-radius: 16px;
+        padding: .85rem .9rem;
+    }
+
+        .pc-field label {
+            display: block;
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: .10em;
+            color: rgba(100,116,139,.95);
+            font-weight: 900;
+            margin-bottom: .25rem;
+        }
+
+        .pc-field div {
+            color: rgba(15,23,42,.86);
+            font-weight: 700;
+        }
+
+    .pc-methods {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .9rem;
+        margin-top: 1rem;
+    }
+
+    .pc-method {
+        border-radius: 18px;
+        border: 1px solid rgba(15,23,42,.12);
+        background: rgba(255,255,255,.92);
+        padding: 1rem;
+        box-shadow: 0 14px 30px rgba(15,23,42,.08);
+        display: flex;
+        flex-direction: column;
+        gap: .6rem;
+    }
+
+        .pc-method h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 900;
+            color: var(--pc-text);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .pc-method p {
+            margin: 0;
+            color: var(--pc-muted);
+            font-weight: 650;
+            font-size: .9rem;
+        }
+
+    .pc-btn {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+        padding: .6rem 1rem !important;
+    }
+
+    .pc-btn-primary {
+        background: var(--pc-primary) !important;
+        border-color: var(--pc-primary) !important;
+    }
+
+        .pc-btn-primary:hover {
+            background: var(--pc-primary-700) !important;
+            border-color: var(--pc-primary-700) !important;
+        }
+
+    .pc-link {
+        font-weight: 800;
+        color: rgba(79,70,229,.95);
+        text-decoration: none;
+    }
+
+        .pc-link:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="pc-wrap">
+    <div class="pc-head">
+        <div>
+            <h2 class="pc-title">Choose payment method</h2>
+            <div class="pc-sub">Review your session summary, then select how you want to pay.</div>
+        </div>
+    </div>
+
+    <div class="pc-card">
+        <div class="pc-card-pad">
+            <h4 class="mb-2 fw-bold" style="color: var(--pc-text);">Session summary</h4>
+
+            <div class="pc-summary">
+                <div class="pc-field">
+                    <label>Title</label>
+                    <div>@Model.BookingTitle</div>
+                </div>
+                <div class="pc-field">
+                    <label>Type</label>
+                    <div>@Model.BookingType</div>
+                </div>
+                <div class="pc-field">
+                    <label>Date &amp; Time</label>
+                    <div>@Model.BookingDateTime</div>
+                </div>
+                <div class="pc-field">
+                    <label>Amount</label>
+                    <div>@Model.Amount.ToString("0.00") $</div>
+                </div>
+            </div>
+
+            <div class="pc-methods">
+                <div class="pc-method">
+                    <h4><i class="bi bi-credit-card"></i> Pay with card (Stripe)</h4>
+                    <p>Secure checkout experience. Recommended for real payments.</p>
+                    <form asp-action="StripeCheckout" method="post" class="m-0 mt-1">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn pc-btn pc-btn-primary text-white w-100">
+                            Continue to Stripe <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="pc-method">
+                    <h4><i class="bi bi-shield-lock"></i> Dummy method</h4>
+                    <p>Simulated payment gateway for testing (no real money).</p>
+                    <form asp-action="DummyCheckout" method="get" class="m-0 mt-1">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-outline-secondary pc-btn w-100">
+                            Use dummy gateway
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <a asp-controller="Bookings" asp-action="Create" class="pc-link">
+                    <i class="bi bi-arrow-left me-1"></i> Cancel and go back
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

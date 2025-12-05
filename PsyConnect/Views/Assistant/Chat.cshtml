@@ -2,37 +2,290 @@
     ViewData["Title"] = "PsyConnect Assistant";
 }
 
-<div class="row justify-content-center">
-    <div class="col-lg-8 col-md-10">
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-accent: #22c55e;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.98);
+        --pc-shadow: 0 18px 50px rgba(15,23,42,.12);
+        --pc-radius: 18px;
+    }
 
-        <!-- Sticky safety banner -->
-        <div class="alert alert-warning sticky-top mb-3 small" style="z-index: 1020;">
-            <strong>Important:</strong>
-            PsyConnect Assistant gives only general, educational information about psychotherapy and this platform.
-            It is <strong>not</strong> a therapist, does <strong>not</strong> provide diagnoses, and is <strong>not</strong> for emergencies or crisis situations.
-            In an emergency, contact local emergency services or a trusted professional immediately.
-        </div>
+    .pc-chat-wrap {
+        max-width: 980px;
+        margin: 0 auto;
+    }
 
-        <div class="card shadow-sm">
-            <div class="card-header">
-                <h5 class="mb-0">PsyConnect Assistant</h5>
+    /* Safety banner - calmer, still visible */
+    .pc-safety {
+        position: sticky;
+        top: .75rem;
+        z-index: 1020;
+        border-radius: 16px;
+        border: 1px solid rgba(234,179,8,.35);
+        background: radial-gradient(700px 220px at 0% 0%, rgba(234,179,8,.16), transparent 55%), rgba(255,255,255,.90);
+        box-shadow: 0 10px 28px rgba(15,23,42,.10);
+        color: rgba(15,23,42,.80);
+    }
+
+        .pc-safety strong {
+            color: rgba(15,23,42,.95);
+        }
+
+    .pc-chat-card {
+        background: var(--pc-card);
+        border: 1px solid var(--pc-border);
+        border-radius: 22px;
+        box-shadow: var(--pc-shadow);
+        overflow: hidden;
+    }
+
+    .pc-chat-header {
+        padding: 1rem 1.1rem;
+        border-bottom: 1px solid var(--pc-border);
+        background: radial-gradient(900px 240px at 10% 0%, rgba(79,70,229,.12), transparent 60%), radial-gradient(800px 240px at 90% 0%, rgba(34,197,94,.10), transparent 55%), rgba(255,255,255,.92);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: .75rem;
+        flex-wrap: wrap;
+    }
+
+    .pc-chat-title {
+        display: flex;
+        align-items: center;
+        gap: .65rem;
+    }
+
+    .pc-chat-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--pc-primary), var(--pc-accent));
+        color: #fff;
+        font-weight: 900;
+        box-shadow: 0 12px 28px rgba(79,70,229,.22);
+    }
+
+    .pc-chat-title h5 {
+        margin: 0;
+        font-weight: 900;
+        color: var(--pc-text);
+        letter-spacing: .2px;
+    }
+
+    .pc-chat-title p {
+        margin: .15rem 0 0;
+        color: var(--pc-muted);
+        font-weight: 650;
+        font-size: .9rem;
+    }
+
+    .pc-chat-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        padding: .3rem .7rem;
+        border-radius: 999px;
+        border: 1px solid rgba(79,70,229,.20);
+        background: rgba(79,70,229,.06);
+        color: rgba(79,70,229,.95);
+        font-weight: 800;
+        font-size: .8rem;
+        white-space: nowrap;
+    }
+
+    .pc-chat-body {
+        padding: 1rem 1rem 0.9rem;
+    }
+
+    /* Chat window */
+    #chatWindow {
+        background: radial-gradient(1000px 300px at 0% 0%, rgba(79,70,229,.06), transparent 60%), radial-gradient(900px 280px at 100% 0%, rgba(34,197,94,.05), transparent 55%), rgba(248,250,252,.85);
+        border: 1px solid var(--pc-border) !important;
+        border-radius: 18px !important;
+        padding: 1rem !important;
+    }
+
+    .pc-empty {
+        border: 1px dashed rgba(148,163,184,.6);
+        background: rgba(255,255,255,.7);
+        border-radius: 16px;
+        padding: .9rem;
+        color: var(--pc-muted);
+        font-weight: 650;
+        font-size: .92rem;
+    }
+
+    /* Message bubbles */
+    .pc-msg {
+        display: flex;
+        margin-bottom: .75rem;
+    }
+
+        .pc-msg.pc-me {
+            justify-content: flex-end;
+        }
+
+    .pc-bubble {
+        max-width: 82%;
+        padding: .75rem .9rem;
+        border-radius: 16px;
+        border: 1px solid var(--pc-border);
+        background: rgba(255,255,255,.92);
+        color: rgba(15,23,42,.86);
+        font-weight: 650;
+        line-height: 1.35;
+        box-shadow: 0 10px 22px rgba(15,23,42,.06);
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .pc-me .pc-bubble {
+        background: rgba(79,70,229,.10);
+        border-color: rgba(79,70,229,.18);
+    }
+
+    .pc-assistant .pc-bubble {
+        background: rgba(255,255,255,.92);
+    }
+
+    .pc-bubble strong {
+        display: block;
+        margin-bottom: .25rem;
+        font-size: .85rem;
+        color: rgba(2,6,23,.72);
+        font-weight: 900;
+    }
+
+    /* Composer */
+    .pc-composer {
+        display: flex;
+        gap: .6rem;
+        align-items: center;
+        margin-top: .9rem;
+        padding: .85rem;
+        border-radius: 18px;
+        border: 1px solid var(--pc-border);
+        background: rgba(255,255,255,.9);
+    }
+
+    #userMessage {
+        border-radius: 14px !important;
+        padding: .9rem .9rem !important;
+        border-color: rgba(15,23,42,.14) !important;
+    }
+
+        #userMessage:focus {
+            border-color: rgba(79,70,229,.65) !important;
+            box-shadow: 0 0 0 .25rem rgba(79,70,229,.15) !important;
+        }
+
+    .pc-send {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+        padding: .75rem 1.1rem !important;
+        background: var(--pc-primary) !important;
+        border-color: var(--pc-primary) !important;
+        white-space: nowrap;
+    }
+
+        .pc-send:hover {
+            background: var(--pc-primary-700) !important;
+            border-color: var(--pc-primary-700) !important;
+        }
+
+    .pc-hint {
+        margin-top: .55rem;
+        color: rgba(100,116,139,.95);
+        font-weight: 650;
+        font-size: .85rem;
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+    }
+
+        .pc-hint i {
+            color: var(--pc-primary);
+        }
+
+    .pc-chat-header {
+        padding: .9rem;
+    }
+
+    .pc-chat-body {
+        padding: .9rem;
+    }
+
+    .pc-composer {
+        padding: .7rem;
+    }
+
+    }
+</style>
+
+<div class="pc-chat-wrap">
+    <div class="row justify-content-center">
+        <div class="col-12">
+
+            <!-- Sticky safety banner -->
+            <div class="alert pc-safety mb-3 small">
+                <strong>Important:</strong>
+                PsyConnect Assistant gives only general, educational information about psychotherapy and this platform.
+                It is <strong>not</strong> a therapist, does <strong>not</strong> provide diagnoses, and is <strong>not</strong> for emergencies or crisis situations.
+                In an emergency, contact local emergency services or a trusted professional immediately.
             </div>
-            <div class="card-body d-flex flex-column" style="height: 60vh;">
-                <div id="chatWindow" class="flex-grow-1 border rounded p-2 mb-3 overflow-auto bg-light">
-                    <div class="text-muted small">
-                        This assistant provides general information about psychotherapy and this platform.
-                        It is not a therapist and not for emergencies.
+
+            <div class="pc-chat-card">
+                <div class="pc-chat-header">
+                    <div class="pc-chat-title">
+                        <div class="pc-chat-mark"><i class="bi bi-robot"></i></div>
+                        <div>
+                            <h5>PsyConnect Assistant</h5>
+                            <p>Ask about sessions, payments, Zoom, or general psychotherapy info.</p>
+                        </div>
                     </div>
+
+                    <span class="pc-chat-badge">
+                        <i class="bi bi-shield-check"></i>
+                        General info only
+                    </span>
                 </div>
 
-                <form id="chatForm" class="d-flex gap-2">
-                    <input type="text" id="userMessage" class="form-control"
-                           placeholder="Ask a question about psychotherapy..." autocomplete="off" />
-                    <button type="submit" class="btn btn-primary">
-                        Send
-                    </button>
-                </form>
+                <div class="pc-chat-body d-flex flex-column" style="height: 70vh;">
+                    <div id="chatWindow" class="flex-grow-1 overflow-auto">
+                        <div class="pc-empty">
+                            <div class="fw-bold mb-1" style="color: var(--pc-text);">Quick ideas to ask:</div>
+                            <ul class="mb-0 ps-3">
+                                <li>“How do I prepare for my session?”</li>
+                                <li>“What are grounding techniques for anxiety?”</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <form id="chatForm" class="pc-composer">
+                        <input type="text" id="userMessage" class="form-control"
+                               placeholder="Ask a question…"
+                               autocomplete="off" />
+                        <button type="submit" class="btn btn-primary pc-send">
+                            <i class="bi bi-send me-1"></i>
+                            Send
+                        </button>
+                    </form>
+
+                    <div class="pc-hint">
+                        <i class="bi bi-info-circle"></i>
+                        Keep it short (1–3 sentences). Don’t share sensitive personal details.
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -89,10 +342,28 @@
         });
 
         function appendMessage(sender, text, extraClass) {
-            const div = document.createElement("div");
-            div.className = "mb-2 " + (extraClass || "");
-            div.innerHTML = `<strong>${sender}:</strong> ${text.replace(/\n/g, "<br>")}`;
-            chatWindow.appendChild(div);
+            // Remove the empty state card once first real message arrives
+            const empty = chatWindow.querySelector(".pc-empty");
+            if (empty) empty.remove();
+
+            const row = document.createElement("div");
+
+            const isMe = sender.toLowerCase() === "you";
+            row.className = "pc-msg " + (isMe ? "pc-me" : "pc-assistant") + " " + (extraClass || "");
+
+            const bubble = document.createElement("div");
+            bubble.className = "pc-bubble";
+
+            const safeText = text.replace(/\n/g, "<br>");
+
+            bubble.innerHTML = `<strong>${sender}</strong>${safeText}`;
+            row.appendChild(bubble);
+
+            if ((extraClass || "").includes("temp-msg")) {
+                row.classList.add("temp-msg");
+            }
+
+            chatWindow.appendChild(row);
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
     </script>

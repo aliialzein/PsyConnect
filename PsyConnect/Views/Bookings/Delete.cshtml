@@ -1,51 +1,183 @@
 ﻿@model PsyConnect.Models.Booking
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete booking";
 }
 
-<h1>Delete</h1>
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.98);
+        --pc-shadow: 0 18px 50px rgba(15,23,42,.12);
+        --pc-radius: 18px;
+    }
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Booking</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Type)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.dateTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.dateTime)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    .pc-wrap {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .pc-card {
+        background: var(--pc-card);
+        border: 1px solid var(--pc-border);
+        border-radius: 22px;
+        box-shadow: var(--pc-shadow);
+        overflow: hidden;
+    }
+
+    .pc-head {
+        padding: 1rem 1.1rem;
+        border-bottom: 1px solid var(--pc-border);
+        background: radial-gradient(900px 240px at 10% 0%, rgba(220,38,38,.10), transparent 60%), rgba(255,255,255,.92);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .pc-title {
+        margin: 0;
+        font-weight: 950;
+        color: var(--pc-text);
+        font-size: 1.2rem;
+    }
+
+    .pc-sub {
+        margin: .25rem 0 0;
+        color: var(--pc-muted);
+        font-weight: 650;
+        font-size: .92rem;
+    }
+
+    .pc-danger-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        padding: .3rem .7rem;
+        border-radius: 999px;
+        border: 1px solid rgba(220,38,38,.22);
+        background: rgba(220,38,38,.08);
+        color: #b91c1c;
+        font-weight: 900;
+        font-size: .8rem;
+        white-space: nowrap;
+    }
+
+    .pc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding: 1.1rem;
+    }
+
+    .pc-field {
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(248,250,252,.85);
+        border-radius: 16px;
+        padding: .85rem .9rem;
+    }
+
+        .pc-field label {
+            display: block;
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: .10em;
+            color: rgba(100,116,139,.95);
+            font-weight: 900;
+            margin-bottom: .25rem;
+        }
+
+        .pc-field div {
+            color: rgba(15,23,42,.86);
+            font-weight: 700;
+        }
+
+    .pc-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: .75rem;
+        padding: 0 1.1rem 1.1rem;
+        flex-wrap: wrap;
+    }
+
+    .pc-btn {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+        padding: .6rem 1rem !important;
+    }
+
+    .pc-btn-danger {
+        background: #dc2626 !important;
+        border-color: #dc2626 !important;
+    }
+
+        .pc-btn-danger:hover {
+            background: #b91c1c !important;
+            border-color: #b91c1c !important;
+        }
+</style>
+
+<div class="pc-wrap">
+    <div class="pc-card">
+        <div class="pc-head">
+            <div>
+                <h1 class="pc-title">Delete booking</h1>
+                <p class="pc-sub mb-0">
+                    This action removes the booking from your list. If you’re unsure, go back instead.
+                </p>
+            </div>
+
+            <span class="pc-danger-pill">
+                <i class="bi bi-exclamation-triangle"></i>
+                This can’t be undone
+            </span>
+        </div>
+
+        <div class="pc-grid">
+            <div class="pc-field">
+                <label>@Html.DisplayNameFor(m => m.Title)</label>
+                <div>@Html.DisplayFor(m => m.Title)</div>
+            </div>
+
+            <div class="pc-field">
+                <label>@Html.DisplayNameFor(m => m.dateTime)</label>
+                <div>@Model.dateTime.ToString("ddd dd MMM yyyy HH:mm")</div>
+            </div>
+
+            <div class="pc-field">
+                <label>@Html.DisplayNameFor(m => m.Description)</label>
+                <div>@Html.DisplayFor(m => m.Description)</div>
+            </div>
+
+            <div class="pc-field">
+                <label>Type / Status</label>
+                <div>@Html.DisplayFor(m => m.Type) · @Html.DisplayFor(m => m.Status)</div>
+            </div>
+        </div>
+
+        <div class="px-4 pb-2">
+            <div class="alert alert-danger mb-0" style="border-radius:16px;">
+                <strong>Are you sure?</strong>
+                Deleting this booking will remove it from your schedule.
+            </div>
+        </div>
+
+        <div class="pc-actions">
+            <a asp-action="Index" class="btn btn-outline-secondary pc-btn">
+                <i class="bi bi-arrow-left me-1"></i> Back to list
+            </a>
+
+            <form asp-action="Delete" class="m-0">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn pc-btn pc-btn-danger text-white">
+                    <i class="bi bi-trash3 me-1"></i> Delete booking
+                </button>
+            </form>
+        </div>
+    </div>
 </div>

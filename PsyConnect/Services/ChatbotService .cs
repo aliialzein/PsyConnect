@@ -128,7 +128,6 @@ namespace PsyConnect.Services
             }
             catch (Exception)
             {
-                // You can log ex here
                 return "Sorry, something went wrong while contacting the assistant.";
             }
         }

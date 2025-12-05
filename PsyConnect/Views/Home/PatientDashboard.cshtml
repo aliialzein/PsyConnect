@@ -10,91 +10,365 @@
     var nextSession = ViewBag.NextSession as PsyConnect.Models.Booking;
 }
 
-<h2>My Dashboard</h2>
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-accent: #22c55e;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.98);
+        --pc-shadow: 0 18px 50px rgba(15,23,42,.12);
+        --pc-radius: 18px;
+    }
 
-<div class="row mt-3">
+    .pc-dash-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: .75rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .pc-dash-title {
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--pc-text);
+        margin-bottom: .1rem;
+    }
+
+    .pc-dash-sub {
+        color: var(--pc-muted);
+        font-size: .95rem;
+        font-weight: 600;
+    }
+
+    .pc-chip {
+        font-size: .8rem;
+        padding: .3rem .7rem;
+        border-radius: 999px;
+        border: 1px solid var(--pc-border);
+        background: rgba(248,250,252,.9);
+        color: var(--pc-muted);
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+    }
+
+        .pc-chip i {
+            color: var(--pc-primary);
+        }
+
+    .pc-metric-card {
+        background: var(--pc-card);
+        border-radius: var(--pc-radius);
+        border: 1px solid var(--pc-border);
+        box-shadow: var(--pc-shadow);
+        padding: 1rem 1rem .95rem;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pc-metric-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        background: rgba(79,70,229,.08);
+        color: var(--pc-primary);
+        font-size: 1.2rem;
+        margin-bottom: .55rem;
+    }
+
+    .pc-metric-label {
+        font-size: .86rem;
+        font-weight: 750;
+        color: var(--pc-muted);
+        margin-bottom: .2rem;
+    }
+
+    .pc-metric-value {
+        font-size: 1.35rem;
+        font-weight: 950;
+        color: var(--pc-text);
+        line-height: 1.1;
+    }
+
+    .pc-metric-sub {
+        font-size: .8rem;
+        color: rgba(100,116,139,.98);
+        font-weight: 650;
+        margin-top: .25rem;
+    }
+
+    .pc-callout {
+        margin-top: 1rem;
+        background: radial-gradient(900px 320px at 10% 0%, rgba(79,70,229,.16), transparent 60%), radial-gradient(700px 280px at 90% 0%, rgba(34,197,94,.12), transparent 55%), rgba(255,255,255,.85);
+        border: 1px solid rgba(79,70,229,.18);
+        border-radius: var(--pc-radius);
+        padding: 1rem 1rem .95rem;
+        box-shadow: var(--pc-shadow);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .pc-callout-title {
+        margin: 0;
+        font-weight: 900;
+        color: var(--pc-text);
+        font-size: 1rem;
+    }
+
+    .pc-callout-text {
+        margin: .2rem 0 0;
+        color: var(--pc-muted);
+        font-weight: 650;
+    }
+
+    .pc-callout-badge {
+        border-radius: 999px;
+        padding: .25rem .65rem;
+        border: 1px solid rgba(34,197,94,.22);
+        background: rgba(34,197,94,.10);
+        color: #166534;
+        font-weight: 800;
+        font-size: .8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        white-space: nowrap;
+    }
+
+    .pc-section-card {
+        background: var(--pc-card);
+        border-radius: var(--pc-radius);
+        border: 1px solid var(--pc-border);
+        box-shadow: var(--pc-shadow);
+        padding: 1rem;
+        height: 100%;
+    }
+
+    .pc-section-title {
+        font-size: 1.05rem;
+        font-weight: 900;
+        color: var(--pc-text);
+        margin-bottom: .2rem;
+    }
+
+    .pc-section-sub {
+        font-size: .85rem;
+        color: var(--pc-muted);
+        font-weight: 650;
+        margin-bottom: .6rem;
+    }
+
+    .pc-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: .75rem;
+        flex-wrap: wrap;
+        margin-bottom: .6rem;
+    }
+
+    .pc-status-pill {
+        font-size: .78rem;
+        padding: .15rem .6rem;
+        border-radius: 999px;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+    }
+
+    .pc-status-Pending {
+        background: rgba(234,179,8,.14);
+        color: #854d0e;
+    }
+
+    .pc-status-InProgress {
+        background: rgba(59,130,246,.14);
+        color: #1d4ed8;
+    }
+
+    .pc-status-Completed {
+        background: rgba(34,197,94,.14);
+        color: #166534;
+    }
+
+    .pc-table {
+        border-radius: var(--pc-radius);
+        overflow: hidden;
+        border: 1px solid var(--pc-border);
+    }
+
+        .pc-table thead th {
+            background: rgba(248,250,252,.95);
+            color: rgba(15,23,42,.78);
+            font-weight: 900;
+            font-size: .85rem;
+            border-bottom: 1px solid var(--pc-border);
+        }
+
+        .pc-table tbody td {
+            color: rgba(15,23,42,.78);
+            font-weight: 650;
+            font-size: .9rem;
+        }
+
+    #patientCalendar {
+        background: rgba(248,250,252,.9);
+        border-radius: var(--pc-radius);
+        border: 1px solid var(--pc-border);
+        padding: .3rem;
+    }
+</style>
+
+<div class="pc-dash-header">
+    <div>
+        <div class="pc-dash-title">My dashboard</div>
+        <div class="pc-dash-sub">Sessions, calendar, and progress — in one calm view.</div>
+    </div>
+    <div>
+        <span class="pc-chip">
+            <i class="bi bi-person-check"></i>
+            Patient view
+        </span>
+    </div>
+</div>
+
+<!-- Metrics -->
+<div class="row g-3">
     <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <div>Total Sessions</div>
-                <h3>@ViewBag.TotalMyBookings</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-icon"><i class="bi bi-journal-check"></i></div>
+            <div class="pc-metric-label">Total sessions</div>
+            <div class="pc-metric-value">@ViewBag.TotalMyBookings</div>
+            <div class="pc-metric-sub">All time bookings</div>
         </div>
     </div>
+
     <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <div>Upcoming</div>
-                <h3>@ViewBag.UpcomingMyBookings</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-icon"><i class="bi bi-calendar2-week"></i></div>
+            <div class="pc-metric-label">Upcoming</div>
+            <div class="pc-metric-value">@ViewBag.UpcomingMyBookings</div>
+            <div class="pc-metric-sub">Scheduled sessions</div>
         </div>
     </div>
+
     <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <div>Completed</div>
-                <h3>@ViewBag.CompletedMyBookings</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-icon"><i class="bi bi-check2-circle"></i></div>
+            <div class="pc-metric-label">Completed</div>
+            <div class="pc-metric-value">@ViewBag.CompletedMyBookings</div>
+            <div class="pc-metric-sub">Finished sessions</div>
         </div>
     </div>
 </div>
 
 @if (nextSession != null)
 {
-    <div class="alert alert-info mt-3">
-        <strong>Next session:</strong>
-        @nextSession.dateTime.ToString("ddd dd MMM yyyy HH:mm") (@nextSession.Type)
+    <div class="pc-callout">
+        <div>
+            <p class="pc-callout-title mb-0">Next session</p>
+            <p class="pc-callout-text">
+                @nextSession.dateTime.ToString("ddd dd MMM yyyy HH:mm") · @nextSession.Type
+            </p>
+        </div>
+        <span class="pc-callout-badge">
+            <i class="bi bi-clock"></i>
+            Upcoming
+        </span>
     </div>
 }
 
-<hr />
-
-<div class="row mt-3">
+<!-- Charts + Calendar -->
+<div class="row g-3 mt-2">
     <div class="col-md-6">
-        <h4>Sessions per month (last 6 months)</h4>
-        <canvas id="monthlyChart"></canvas>
-    </div>
-    <div class="col-md-6">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <h4>My calendar</h4>
-            <div>
-                <label>Status filter:</label>
-                <select id="patientStatusFilter" class="form-select form-select-sm" style="width:auto;display:inline-block;">
-                    <option value="All">All</option>
-                    <option value="Pending">Pending</option>
-                    <option value="InProgress">In Progress</option>
-                    <option value="Completed">Completed</option>
-                </select>
+        <div class="pc-section-card">
+            <div class="pc-toolbar">
+                <div>
+                    <div class="pc-section-title">Sessions per month</div>
+                    <div class="pc-section-sub">Last 6 months activity</div>
+                </div>
             </div>
+            <canvas id="monthlyChart" style="max-height:320px;"></canvas>
         </div>
-        <div id="patientCalendar"></div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="pc-section-card">
+            <div class="pc-toolbar">
+                <div>
+                    <div class="pc-section-title">My calendar</div>
+                    <div class="pc-section-sub">Filter sessions by status</div>
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+                    <label class="m-0" style="font-size:.85rem; color:var(--pc-muted); font-weight:800;">
+                        Status:
+                    </label>
+                    <select id="patientStatusFilter"
+                            class="form-select form-select-sm"
+                            style="width:auto;">
+                        <option value="All">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="InProgress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="patientCalendar"></div>
+        </div>
     </div>
 </div>
 
-<hr />
+<!-- Upcoming list -->
+<div class="pc-section-card mt-3">
+    <div class="pc-toolbar">
+        <div>
+            <div class="pc-section-title">Upcoming sessions</div>
+            <div class="pc-section-sub">List view of your upcoming bookings</div>
+        </div>
+    </div>
 
-<h4>Upcoming sessions (list)</h4>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Date & Time</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Title</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var b in Model)
-        {
-            <tr>
-                <td>@b.dateTime.ToString("ddd dd MMM yyyy HH:mm")</td>
-                <td>@b.Type</td>
-                <td>@b.Status</td>
-                <td>@b.Title</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="table-responsive pc-table">
+        <table class="table table-sm align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Date &amp; Time</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model)
+                {
+                    <tr>
+                        <td>@b.dateTime.ToString("ddd dd MMM yyyy HH:mm")</td>
+                        <td>@b.Type</td>
+                        <td>
+                            <span class="pc-status-pill pc-status-@b.Status">
+                                @b.Status
+                            </span>
+                        </td>
+                        <td>@b.Title</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -114,8 +388,20 @@
                 datasets: [{
                     label: 'Sessions',
                     data: monthValues,
-                    tension: 0.3
+                    tension: 0.35,
+                    borderColor: 'rgba(79, 70, 229, 0.9)',
+                    backgroundColor: 'rgba(79, 70, 229, 0.12)',
+                    fill: true,
+                    pointRadius: 3,
+                    pointHoverRadius: 5
                 }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: '#64748b' }, grid: { display: false } },
+                    y: { ticks: { color: '#64748b', precision: 0 }, grid: { color: 'rgba(148,163,184,0.35)' } }
+                }
             }
         });
 

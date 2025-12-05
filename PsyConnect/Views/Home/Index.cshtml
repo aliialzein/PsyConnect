@@ -2,43 +2,524 @@
     ViewData["Title"] = "Welcome";
 }
 
-<section class="bg-primary text-white text-center py-5 rounded shadow">
-    <h1 class="display-4 fw-bold">Your Mental Health, Connected</h1>
-    <p class="lead mt-3">
-        Book therapy sessions, meet online, and manage your care — from one place.
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-accent: #22c55e;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.10);
+        --pc-card: rgba(255,255,255,.96);
+        --pc-shadow: 0 20px 55px rgba(15,23,42,.18);
+        --pc-radius: 22px;
+    }
+
+    .pc-hero-wrap {
+        padding-top: 1.5rem;
+        padding-bottom: 2.5rem;
+    }
+
+    .pc-hero {
+        position: relative;
+        overflow: hidden;
+        border-radius: 26px;
+        padding: 2.5rem 2.25rem;
+        background: radial-gradient(900px 380px at 0% 0%, rgba(79,70,229,.26), transparent 60%), radial-gradient(850px 420px at 100% 10%, rgba(34,197,94,.22), transparent 60%), linear-gradient(135deg, #0f172a, #020617);
+        color: #f9fafb;
+        box-shadow: var(--pc-shadow);
+        border: 1px solid rgba(148,163,184,.22);
+    }
+
+    .pc-hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        padding: .25rem .7rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148,163,184,.55);
+        background: rgba(15,23,42,.75);
+        font-size: .78rem;
+        text-transform: uppercase;
+        letter-spacing: .12em;
+        margin-bottom: .9rem;
+        color: #e5e7eb;
+    }
+
+        .pc-hero-eyebrow i {
+            font-size: .9rem;
+            color: #a5b4fc;
+        }
+
+    .pc-hero-title {
+        font-size: clamp(2.1rem, 3vw, 2.8rem);
+        font-weight: 900;
+        letter-spacing: .02em;
+        margin-bottom: .75rem;
+    }
+
+    .pc-hero-subtitle {
+        font-size: 1rem;
+        max-width: 32rem;
+        color: #cbd5f5;
+        font-weight: 600;
+    }
+
+    .pc-hero-cta {
+        margin-top: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: .75rem;
+        align-items: center;
+    }
+
+    .pc-btn-primary {
+        border-radius: 999px !important;
+        padding: .9rem 1.4rem !important;
+        font-weight: 800 !important;
+        letter-spacing: .02em;
+        background: var(--pc-primary) !important;
+        border-color: var(--pc-primary) !important;
+        color: #fff !important;
+    }
+
+        .pc-btn-primary:hover {
+            background: var(--pc-primary-700) !important;
+            border-color: var(--pc-primary-700) !important;
+        }
+
+    .pc-btn-ghost {
+        border-radius: 999px !important;
+        padding: .9rem 1.3rem !important;
+        font-weight: 750 !important;
+        letter-spacing: .02em;
+        background: rgba(15,23,42,.4) !important;
+        border-color: rgba(148,163,184,.7) !important;
+        color: #e5e7eb !important;
+    }
+
+        .pc-btn-ghost:hover {
+            background: rgba(15,23,42,.75) !important;
+        }
+
+    .pc-hero-note {
+        font-size: .86rem;
+        color: #cbd5f5;
+        margin-top: .5rem;
+    }
+
+    .pc-hero-aside {
+        position: relative;
+    }
+
+    .pc-hero-card {
+        background: rgba(15,23,42,.86);
+        border-radius: 18px;
+        border: 1px solid rgba(148,163,184,.5);
+        padding: 1.1rem 1.1rem 1.15rem;
+        box-shadow: 0 18px 40px rgba(15,23,42,.7);
+    }
+
+    .pc-hero-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: .6rem;
+    }
+
+    .pc-hero-label {
+        font-size: .85rem;
+        font-weight: 700;
+        color: #e5e7eb;
+    }
+
+    .pc-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: .25rem;
+        border-radius: 999px;
+        padding: .2rem .6rem;
+        background: rgba(34,197,94,.14);
+        color: #bbf7d0;
+        font-size: .78rem;
+        font-weight: 700;
+    }
+
+        .pc-pill i {
+            font-size: .85rem;
+        }
+
+    .pc-micro-metric {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: .35rem;
+        color: #cbd5f5;
+        font-size: .9rem;
+    }
+
+        .pc-micro-metric span:first-child {
+            opacity: .85;
+        }
+
+        .pc-micro-metric span:last-child {
+            font-weight: 800;
+        }
+
+    .pc-mini-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .35rem;
+        margin-top: .8rem;
+    }
+
+    .pc-mini-tag {
+        font-size: .78rem;
+        padding: .18rem .55rem;
+        border-radius: 999px;
+        background: rgba(15,23,42,.9);
+        border: 1px solid rgba(148,163,184,.5);
+        color: #e5e7eb;
+        display: inline-flex;
+        align-items: center;
+        gap: .3rem;
+    }
+
+        .pc-mini-tag i {
+            font-size: .85rem;
+            color: #a5b4fc;
+        }
+
+    /* Features */
+    .pc-section-header {
+        margin-top: 2.5rem;
+        margin-bottom: 1.25rem;
+        text-align: center;
+    }
+
+    .pc-section-title {
+        font-weight: 900;
+        font-size: 1.35rem;
+        color: var(--pc-text);
+        margin-bottom: .2rem;
+    }
+
+    .pc-section-sub {
+        color: var(--pc-muted);
+        max-width: 32rem;
+        margin: 0 auto;
+        font-weight: 600;
+        font-size: .95rem;
+    }
+
+    .pc-feature-card {
+        border-radius: 18px;
+        padding: 1.4rem 1.3rem;
+        background: var(--pc-card);
+        border: 1px solid var(--pc-border);
+        box-shadow: 0 14px 32px rgba(148,163,184,.22);
+        height: 100%;
+        text-align: left;
+    }
+
+    .pc-feature-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: rgba(79,70,229,.08);
+        color: var(--pc-primary);
+        font-size: 1.3rem;
+        margin-bottom: .7rem;
+    }
+
+    .pc-feature-title {
+        font-weight: 800;
+        font-size: 1rem;
+        margin-bottom: .15rem;
+        color: var(--pc-text);
+    }
+
+    .pc-feature-text {
+        color: var(--pc-muted);
+        margin-bottom: .5rem;
+        font-size: .92rem;
+        font-weight: 600;
+    }
+
+    .pc-feature-meta {
+        font-size: .82rem;
+        color: rgba(100,116,139,.95);
+        font-weight: 650;
+    }
+
+    /* Flow section */
+    .pc-flow {
+        margin-top: 2.75rem;
+        border-radius: 18px;
+        border: 1px dashed rgba(148,163,184,.6);
+        padding: 1.6rem 1.4rem;
+        background: linear-gradient(135deg, rgba(248,250,252,1), rgba(239,246,255,.9));
+    }
+
+    .pc-flow-badge {
+        font-size: .78rem;
+        text-transform: uppercase;
+        letter-spacing: .12em;
+        font-weight: 800;
+        color: var(--pc-muted);
+        margin-bottom: .4rem;
+    }
+
+    .pc-flow-title {
+        font-size: 1.02rem;
+        font-weight: 800;
+        margin-bottom: .8rem;
+        color: var(--pc-text);
+    }
+
+    .pc-flow-step {
+        display: flex;
+        gap: .75rem;
+        align-items: flex-start;
+        margin-bottom: .8rem;
+        font-size: .9rem;
+        color: var(--pc-muted);
+        font-weight: 600;
+    }
+
+    .pc-flow-step-num {
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: var(--pc-primary);
+        display: grid;
+        place-items: center;
+        font-size: .8rem;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .pc-flow-step strong {
+        color: var(--pc-text);
+        font-weight: 800;
+    }
+
+    .pc-hero-wrap {
+        padding-top: .5rem;
+    }
+
+    .pc-hero-aside {
+        margin-top: 1.5rem;
+    }
+
+    }
+</style>
+
+<div class="pc-hero-wrap">
+    <div class="pc-hero">
+        <div class="row align-items-center">
+            <!-- LEFT: copy + CTA -->
+            <div class="col-lg-7 mb-3 mb-lg-0">
+                <div class="pc-hero-eyebrow">
+                    <i class="bi bi-heart-pulse"></i>
+                    Designed for mental health practices
+                </div>
+
+                <h1 class="pc-hero-title">
+                    Your mental health, calmly connected.
+                </h1>
+
+                <p class="pc-hero-subtitle">
+                    Book sessions, join secure Zoom meetings, chat with the AI assistant, and pay online —
+                    all in one place built for therapists and their clients.
+                </p>
+
+                <div class="pc-hero-cta">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a class="btn pc-btn-primary"
+                           asp-area="Identity" asp-page="/Account/Register">
+                            <i class="bi bi-stars me-1"></i>
+                            Get started
+                        </a>
+
+                        <a class="btn pc-btn-ghost"
+                           asp-area="Identity" asp-page="/Account/Login">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>
+                            I already have an account
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn pc-btn-primary"
+                           asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-speedometer2 me-1"></i>
+                            Go to dashboard
+                        </a>
+                    }
+                </div>
+
+                <p class="pc-hero-note">
+                    No apps to install. Just a browser, a link, and a calmer way to manage care.
+                </p>
+            </div>
+
+            <!-- RIGHT: quick snapshot card -->
+            <div class="col-lg-5 pc-hero-aside">
+                <div class="pc-hero-card">
+                    <div class="pc-hero-card-header">
+                        <span class="pc-hero-label">Today at a glance</span>
+                        <span class="pc-pill">
+                            <i class="bi bi-check2-circle"></i>
+                            Fewer no-shows
+                        </span>
+                    </div>
+
+                    <div class="pc-micro-metric">
+                        <span>Upcoming sessions</span>
+                        <span>Zoom · Onsite</span>
+                    </div>
+                    <div class="pc-micro-metric">
+                        <span>Payments</span>
+                        <span>Stripe · Secure</span>
+                    </div>
+                    <div class="pc-micro-metric">
+                        <span>Support</span>
+                        <span>AI Assistant</span>
+                    </div>
+
+                    <div class="pc-mini-tags">
+                        <span class="pc-mini-tag">
+                            <i class="bi bi-calendar2-check"></i>
+                            Smart scheduling
+                        </span>
+                        <span class="pc-mini-tag">
+                            <i class="bi bi-camera-video"></i>
+                            Zoom integration
+                        </span>
+                        <span class="pc-mini-tag">
+                            <i class="bi bi-robot"></i>
+                            AI summaries
+                        </span>
+                        <span class="pc-mini-tag">
+                            <i class="bi bi-credit-card-2-front"></i>
+                            Stripe payments
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features section -->
+<div class="pc-section-header">
+    <h2 class="pc-section-title">Everything in one calm workspace</h2>
+    <p class="pc-section-sub">
+        PsyConnect brings bookings, online sessions, payments, and AI into a single, safe interface —
+        so you can focus on the work that matters.
     </p>
+</div>
 
-    @if (!User.Identity.IsAuthenticated)
-    {
-        <a class="btn btn-light btn-lg me-3 mt-3" asp-area="Identity" asp-page="/Account/Login">
-            Login
-        </a>
-        <a class="btn btn-outline-light btn-lg mt-3" asp-area="Identity" asp-page="/Account/Register">
-            Register
-        </a>
-    }
-    else
-    {
-        <a class="btn btn-light btn-lg mt-4" asp-controller="Home" asp-action="Index">
-            Go to Dashboard
-        </a>
-    }
-</section>
+<div class="row g-4 mt-2">
+    <div class="col-md-6 col-lg-3">
+        <div class="pc-feature-card">
+            <div class="pc-feature-icon">
+                <i class="bi bi-camera-video"></i>
+            </div>
+            <h4 class="pc-feature-title">Online & onsite sessions</h4>
+            <p class="pc-feature-text">
+                Join secure Zoom calls or manage in-person appointments with clear session details.
+            </p>
+            <p class="pc-feature-meta">
+                Automatic links · Time-zone aware · Client friendly
+            </p>
+        </div>
+    </div>
 
-<div class="row text-center mt-5">
-    <div class="col-md-4">
-        <i class="bi bi-camera-video fs-1 text-primary"></i>
-        <h4 class="mt-2">Online Sessions</h4>
-        <p>Join secure Zoom meetings automatically.</p>
+    <div class="col-md-6 col-lg-3">
+        <div class="pc-feature-card">
+            <div class="pc-feature-icon">
+                <i class="bi bi-calendar-event"></i>
+            </div>
+            <h4 class="pc-feature-title">Clean, predictable scheduling</h4>
+            <p class="pc-feature-text">
+                See everything at a glance — today’s sessions, upcoming weeks, and booking status.
+            </p>
+            <p class="pc-feature-meta">
+                Pending / In progress / Completed · Fewer surprises
+            </p>
+        </div>
     </div>
-    <div class="col-md-4">
-        <i class="bi bi-calendar-event fs-1 text-primary"></i>
-        <h4 class="mt-2">Easy Scheduling</h4>
-        <p>Book and manage appointments easily.</p>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="pc-feature-card">
+            <div class="pc-feature-icon">
+                <i class="bi bi-credit-card"></i>
+            </div>
+            <h4 class="pc-feature-title">Stripe-powered payments</h4>
+            <p class="pc-feature-text">
+                Offer clients a familiar, secure checkout experience and keep your revenue organized.
+            </p>
+        </div>
     </div>
-    <div class="col-md-4">
-        <i class="bi bi-credit-card fs-1 text-primary"></i>
-        <h4 class="mt-2">Secure Payment</h4>
-        <p>Stripe-powered checkout.</p>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="pc-feature-card">
+            <div class="pc-feature-icon">
+                <i class="bi bi-robot"></i>
+            </div>
+            <h4 class="pc-feature-title">AI Assistant (chatbot)</h4>
+            <p class="pc-feature-text">
+                A supportive chat experience for users — quick answers, guidance, and safer next steps.
+            </p>
+            <p class="pc-feature-meta">
+                24/7 support · Context-aware · Optional & private
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div class="pc-flow">
+    <div class="row g-3 align-items-start">
+        <div class="col-lg-6 mb-2 mb-lg-0">
+            <div class="pc-flow-badge">How PsyConnect fits your day</div>
+            <div class="pc-flow-title">From booking to payment in three simple steps</div>
+
+            <div class="pc-flow-step">
+                <div class="pc-flow-step-num">1</div>
+                <div>
+                    <strong>Clients book a session</strong><br />
+                    They choose a time, type (online or onsite), and receive a clear confirmation.
+                </div>
+            </div>
+
+            <div class="pc-flow-step">
+                <div class="pc-flow-step-num">2</div>
+                <div>
+                    <strong>You meet via Zoom or in person</strong><br />
+                    Session details, links, and status are kept in sync across your dashboard.
+                </div>
+            </div>
+
+            <div class="pc-flow-step">
+                <div class="pc-flow-step-num">3</div>
+                <div>
+                    <strong>Payments and summaries stay organized</strong><br />
+                    Stripe handles payment.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <p class="pc-section-sub mb-2 text-start">
+                Whether you’re a solo therapist or part of a clinic, PsyConnect is designed to reduce
+                friction for both you and your clients.
+            </p>
+        </div>
     </div>
 </div>

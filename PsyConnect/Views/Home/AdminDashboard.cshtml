@@ -27,149 +27,409 @@
     var pendingPayments = _db.Payments.Count(p => p.Status == "Pending");
 }
 
-<h2>Admin Dashboard</h2>
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-accent: #22c55e;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.98);
+        --pc-shadow: 0 18px 50px rgba(15,23,42,.12);
+        --pc-radius: 18px;
+    }
 
-<!-- Summary cards -->
-<div class="row mt-3">
+    .pc-dash-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: .75rem;
+        margin-bottom: 1.4rem;
+    }
+
+    .pc-dash-title {
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--pc-text);
+        margin-bottom: .1rem;
+    }
+
+    .pc-dash-sub {
+        color: var(--pc-muted);
+        font-size: .95rem;
+        font-weight: 600;
+    }
+
+    .pc-dash-chip {
+        font-size: .8rem;
+        padding: .3rem .7rem;
+        border-radius: 999px;
+        border: 1px solid var(--pc-border);
+        background: rgba(248,250,252,.9);
+        color: var(--pc-muted);
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+    }
+
+        .pc-dash-chip i {
+            color: var(--pc-primary);
+        }
+
+    .pc-metric-card {
+        background: var(--pc-card);
+        border-radius: var(--pc-radius);
+        border: 1px solid var(--pc-border);
+        box-shadow: var(--pc-shadow);
+        padding: 1rem 1rem .95rem;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pc-metric-label {
+        font-size: .86rem;
+        font-weight: 700;
+        color: var(--pc-muted);
+        margin-bottom: .2rem;
+    }
+
+    .pc-metric-value {
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: var(--pc-text);
+    }
+
+    .pc-metric-sub {
+        font-size: .8rem;
+        color: rgba(100,116,139,.98);
+        font-weight: 650;
+        margin-top: .25rem;
+    }
+
+    .pc-metric-pill {
+        position: absolute;
+        right: .7rem;
+        top: .7rem;
+        font-size: .75rem;
+        padding: .18rem .5rem;
+        border-radius: 999px;
+        background: rgba(79,70,229,.06);
+        color: var(--pc-primary);
+        font-weight: 700;
+    }
+
+    .pc-metric-pill--success {
+        background: rgba(22,163,74,.08);
+        color: #16a34a;
+    }
+
+    .pc-metric-pill--warn {
+        background: rgba(234,179,8,.08);
+        color: #ca8a04;
+    }
+
+    .pc-metric-pill--danger {
+        background: rgba(220,38,38,.08);
+        color: #dc2626;
+    }
+
+    .pc-section-card {
+        background: var(--pc-card);
+        border-radius: var(--pc-radius);
+        border: 1px solid var(--pc-border);
+        box-shadow: var(--pc-shadow);
+        padding: 1.1rem 1.1rem 1rem;
+        margin-top: 1.4rem;
+    }
+
+    .pc-section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: .75rem;
+        margin-bottom: .7rem;
+    }
+
+        .pc-section-heading h4 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 900;
+            color: var(--pc-text);
+        }
+
+        .pc-section-heading small {
+            color: var(--pc-muted);
+            font-weight: 600;
+        }
+
+    .pc-ai-summary-body {
+        color: var(--pc-muted);
+        font-size: .95rem;
+        font-weight: 600;
+    }
+
+    .pc-ai-empty {
+        color: rgba(148,163,184,1);
+        font-style: italic;
+    }
+
+    .pc-btn-primary {
+        border-radius: 999px !important;
+        padding: .55rem 1rem !important;
+        font-weight: 800 !important;
+        background: var(--pc-primary) !important;
+        border-color: var(--pc-primary) !important;
+    }
+
+        .pc-btn-primary:hover {
+            background: var(--pc-primary-700) !important;
+            border-color: var(--pc-primary-700) !important;
+        }
+
+    .pc-chart-card {
+        background: var(--pc-card);
+        border-radius: var(--pc-radius);
+        border: 1px solid var(--pc-border);
+        box-shadow: var(--pc-shadow);
+        padding: .85rem .9rem;
+        height: 100%;
+    }
+
+    .pc-chart-title {
+        font-size: .98rem;
+        font-weight: 800;
+        color: var(--pc-text);
+        margin-bottom: .25rem;
+    }
+
+    .pc-chart-sub {
+        font-size: .8rem;
+        color: var(--pc-muted);
+        margin-bottom: .2rem;
+    }
+
+    .pc-table-wrap {
+        background: var(--pc-card);
+        border-radius: var(--pc-radius);
+        border: 1px solid var(--pc-border);
+        box-shadow: var(--pc-shadow);
+        padding: 1rem;
+        height: 100%;
+    }
+
+    .pc-table-title {
+        font-size: 1rem;
+        font-weight: 800;
+        margin-bottom: .5rem;
+        color: var(--pc-text);
+    }
+
+    .pc-status-pill {
+        font-size: .78rem;
+        padding: .15rem .6rem;
+        border-radius: 999px;
+        font-weight: 750;
+    }
+
+    .pc-status-Pending {
+        background: rgba(234,179,8,.12);
+        color: #854d0e;
+    }
+
+    .pc-status-InProgress {
+        background: rgba(59,130,246,.12);
+        color: #1d4ed8;
+    }
+
+    .pc-status-Completed {
+        background: rgba(34,197,94,.12);
+        color: #166534;
+    }
+
+    #adminCalendar {
+        background: rgba(248,250,252,.9);
+        border-radius: var(--pc-radius);
+        border: 1px solid var(--pc-border);
+        padding: .3rem;
+    }
+</style>
+
+<div class="pc-dash-header">
+    <div>
+        <div class="pc-dash-title">Admin dashboard</div>
+        <div class="pc-dash-sub">
+            Overview of bookings, revenue, and sessions across PsyConnect.
+        </div>
+    </div>
+    <div>
+        <span class="pc-dash-chip">
+            <i class="bi bi-bar-chart-line"></i>
+            @now:MMM dd, yyyy
+        </span>
+    </div>
+</div>
+
+<!-- Top metrics: Revenue + payment status -->
+<div class="row g-3">
     <div class="col-md-3">
-        <div class="card text-center bg-light">
-            <div class="card-body">
-                <div>Total Revenue</div>
-                <h3>$@totalRevenue</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">Total revenue</div>
+            <div class="pc-metric-value">$@totalRevenue</div>
+            <div class="pc-metric-sub">All time · Paid via Stripe</div>
+            <span class="pc-metric-pill pc-metric-pill--success">
+                <i class="bi bi-credit-card-2-front me-1"></i> Paid
+            </span>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card text-center bg-light">
-            <div class="card-body">
-                <div>Revenue This Month</div>
-                <h3>$@revenueThisMonth</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">Revenue this month</div>
+            <div class="pc-metric-value">$@revenueThisMonth</div>
+            <div class="pc-metric-sub">@monthStart:MMM yyyy</div>
+            <span class="pc-metric-pill">
+                <i class="bi bi-calendar-week me-1"></i> Month
+            </span>
         </div>
     </div>
 
     <div class="col-md-2">
-        <div class="card text-center bg-light">
-            <div class="card-body">
-                <div>Successful Payments</div>
-                <h3>@successfulPayments</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">Successful payments</div>
+            <div class="pc-metric-value">@successfulPayments</div>
+            <div class="pc-metric-sub">Out of @totalPayments total</div>
+            <span class="pc-metric-pill pc-metric-pill--success">Paid</span>
         </div>
     </div>
 
     <div class="col-md-2">
-        <div class="card text-center bg-light">
-            <div class="card-body">
-                <div>Failed Payments</div>
-                <h3>@failedPayments</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">Failed payments</div>
+            <div class="pc-metric-value">@failedPayments</div>
+            <div class="pc-metric-sub">Check Stripe logs</div>
+            <span class="pc-metric-pill pc-metric-pill--danger">Failed</span>
         </div>
     </div>
 
     <div class="col-md-2">
-        <div class="card text-center bg-light">
-            <div class="card-body">
-                <div>Pending Payments</div>
-                <h3>@pendingPayments</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">Pending payments</div>
+            <div class="pc-metric-value">@pendingPayments</div>
+            <div class="pc-metric-sub">Awaiting confirmation</div>
+            <span class="pc-metric-pill pc-metric-pill--warn">Pending</span>
         </div>
     </div>
 </div>
 
-<div class="row mt-3">
+<!-- Booking counts -->
+<div class="row g-3 mt-1">
     <div class="col-md-2">
-        <div class="card text-center">
-            <div class="card-body">
-                <div>Total Bookings</div>
-                <h3>@ViewBag.TotalBookings</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">Total bookings</div>
+            <div class="pc-metric-value">@ViewBag.TotalBookings</div>
+            <div class="pc-metric-sub">All time</div>
         </div>
     </div>
     <div class="col-md-2">
-        <div class="card text-center">
-            <div class="card-body">
-                <div>Today</div>
-                <h3>@ViewBag.TodayBookings</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">Today</div>
+            <div class="pc-metric-value">@ViewBag.TodayBookings</div>
+            <div class="pc-metric-sub">Sessions scheduled</div>
         </div>
     </div>
     <div class="col-md-2">
-        <div class="card text-center">
-            <div class="card-body">
-                <div>Next 7 Days</div>
-                <h3>@ViewBag.Next7DaysBookings</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">Next 7 days</div>
+            <div class="pc-metric-value">@ViewBag.Next7DaysBookings</div>
+            <div class="pc-metric-sub">Upcoming sessions</div>
         </div>
     </div>
     <div class="col-md-2">
-        <div class="card text-center">
-            <div class="card-body">
-                <div>Pending</div>
-                <h3>@ViewBag.PendingCount</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">Pending</div>
+            <div class="pc-metric-value">@ViewBag.PendingCount</div>
+            <div class="pc-metric-sub">Awaiting confirmation</div>
         </div>
     </div>
     <div class="col-md-2">
-        <div class="card text-center">
-            <div class="card-body">
-                <div>In Progress</div>
-                <h3>@ViewBag.InProgressCount</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">In progress</div>
+            <div class="pc-metric-value">@ViewBag.InProgressCount</div>
+            <div class="pc-metric-sub">Currently active</div>
         </div>
     </div>
     <div class="col-md-2">
-        <div class="card text-center">
-            <div class="card-body">
-                <div>Completed</div>
-                <h3>@ViewBag.CompletedCount</h3>
-            </div>
+        <div class="pc-metric-card">
+            <div class="pc-metric-label">Completed</div>
+            <div class="pc-metric-value">@ViewBag.CompletedCount</div>
+            <div class="pc-metric-sub">Finished sessions</div>
         </div>
     </div>
-    <div class="card mt-4 shadow p-3">
-        <h4>AI Summary</h4>
+</div>
 
-        @if (ViewBag.AISummary == null)
-        {
-            <p class="text-muted">No summary generated yet.</p>
-        }
-        else
-        {
-            <p>@ViewBag.AISummary</p>
-        }
-
-        <form method="post" asp-action="GenerateAISummary">
-            <button type="submit" class="btn btn-primary mt-2">
-                Generate Summary
+<!-- AI Summary -->
+<div class="pc-section-card">
+    <div class="pc-section-heading">
+        <div>
+            <h4>AI summary</h4>
+            <small>High-level overview of recent booking and payment patterns.</small>
+        </div>
+        <form method="post" asp-action="GenerateAISummary" class="m-0">
+            <button type="submit" class="btn pc-btn-primary btn-sm">
+                <i class="bi bi-stars me-1"></i>
+                Generate summary
             </button>
         </form>
     </div>
 
-
+    <div class="pc-ai-summary-body">
+        @if (ViewBag.AISummary == null)
+        {
+            <p class="pc-ai-empty mb-0">
+                No summary generated yet. Use the button above to generate an AI overview.
+            </p>
+        }
+        else
+        {
+            <p class="mb-0">@ViewBag.AISummary</p>
+        }
+    </div>
 </div>
 
-<hr />
-
-<div class="row mt-3">
+<!-- Charts row -->
+<div class="row g-3 mt-2">
     <div class="col-md-8">
-        <h4>Bookings – next 7 days</h4>
-        <canvas id="weeklyChart"></canvas>
+        <div class="pc-chart-card">
+            <div class="pc-chart-title">Bookings · next 7 days</div>
+            <div class="pc-chart-sub">Daily count for the upcoming week.</div>
+            <canvas id="weeklyChart" style="max-height:320px;"></canvas>
+        </div>
     </div>
     <div class="col-md-4">
-        <h4>Onsite vs Online</h4>
-        <canvas id="typeChart"></canvas>
+        <div class="pc-chart-card">
+            <div class="pc-chart-title">Onsite vs online</div>
+            <div class="pc-chart-sub">Distribution by session type.</div>
+            <canvas id="typeChart" style="max-height:320px;"></canvas>
+        </div>
     </div>
 </div>
 
-<hr />
-
-<div class="row mt-3">
+<!-- Calendar + upcoming sessions -->
+<div class="row g-3 mt-3">
     <div class="col-md-8">
-        <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="pc-section-heading">
             <h4>Calendar</h4>
             <div>
-                <label>Status filter:</label>
-                <select id="adminStatusFilter" class="form-select form-select-sm" style="width:auto;display:inline-block;">
+                <label class="me-1" style="font-size:.85rem; color:var(--pc-muted); font-weight:700;">
+                    Status filter:
+                </label>
+                <select id="adminStatusFilter"
+                        class="form-select form-select-sm d-inline-block"
+                        style="width:auto;">
                     <option value="All">All</option>
                     <option value="Pending">Pending</option>
                     <option value="InProgress">In Progress</option>
@@ -181,28 +441,36 @@
     </div>
 
     <div class="col-md-4">
-        <h4>Upcoming sessions</h4>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Date & Time</th>
-                    <th>Patient</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var b in Model)
-                {
-                    <tr>
-                        <td>@b.dateTime.ToString("ddd dd MMM yyyy HH:mm")</td>
-                        <td>@b.User?.Email</td>
-                        <td>@b.Type</td>
-                        <td>@b.Status</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div class="pc-table-wrap">
+            <div class="pc-table-title">Upcoming sessions</div>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date &amp; time</th>
+                            <th>Patient</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var b in Model)
+                        {
+                            <tr>
+                                <td>@b.dateTime.ToString("ddd dd MMM yyyy HH:mm")</td>
+                                <td>@b.User?.Email</td>
+                                <td>@b.Type</td>
+                                <td>
+                                    <span class="pc-status-pill pc-status-@b.Status">
+                                        @b.Status
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -227,8 +495,25 @@
                     labels: weeklyLabels,
                     datasets: [{
                         label: 'Bookings',
-                        data: weeklyValues
+                        data: weeklyValues,
+                        backgroundColor: 'rgba(79, 70, 229, 0.7)',
+                        borderRadius: 8
                     }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#64748b' },
+                            grid: { display: false }
+                        },
+                        y: {
+                            ticks: { color: '#64748b', precision: 0 },
+                            grid: { color: 'rgba(148,163,184,0.35)' }
+                        }
+                    }
                 }
             });
         }
@@ -241,13 +526,26 @@
                 data: {
                     labels: ['Onsite', 'Online'],
                     datasets: [{
-                        data: [@onsite, @online]
+                        data: [@onsite, @online],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(79, 70, 229, 0.75)'
+                        ]
                     }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#64748b' }
+                        }
+                    },
+                    cutout: '65%'
                 }
             });
         }
 
-        // ===== Revenue chart =====
+        // (Optional placeholders if you later add these canvases)
         const revenueCanvas = document.getElementById('revenueChart');
         if (revenueCanvas) {
             new Chart(revenueCanvas, {
@@ -255,14 +553,27 @@
                 data: {
                     labels: ['Revenue'],
                     datasets: [{
-                        label: 'This Month',
+                        label: 'This month',
                         data: [@revenueThisMonth],
+                        backgroundColor: 'rgba(79, 70, 229, 0.7)',
+                        borderRadius: 8
                     }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { display: false },
+                        y: {
+                            ticks: { color: '#64748b' },
+                            grid: { color: 'rgba(148,163,184,0.35)' }
+                        }
+                    }
                 }
             });
         }
 
-        // ===== Payment status chart =====
         const paymentCanvas = document.getElementById('paymentChart');
         if (paymentCanvas) {
             new Chart(paymentCanvas, {
@@ -270,8 +581,21 @@
                 data: {
                     labels: ['Paid', 'Failed', 'Pending'],
                     datasets: [{
-                        data: [@successfulPayments, @failedPayments, @pendingPayments]
+                        data: [@successfulPayments, @failedPayments, @pendingPayments],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.9)',
+                            'rgba(248, 113, 113, 0.9)',
+                            'rgba(234, 179, 8, 0.9)'
+                        ]
                     }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#64748b' }
+                        }
+                    }
                 }
             });
         }
@@ -281,7 +605,7 @@
             var calendarEl = document.getElementById('adminCalendar');
             var statusSelect = document.getElementById('adminStatusFilter');
 
-            if (!calendarEl) return; // Safety-check
+            if (!calendarEl) return;
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -318,6 +642,5 @@
                 calendar.refetchEvents();
             });
         });
-
     </script>
 }

@@ -175,7 +175,7 @@ namespace PsyConnect.Controllers
                 Status = "Pending"
             };
 
-            // ✅ CREATE ZOOM MEETING ONLY IF ONLINE
+            // CREATE ZOOM MEETING ONLY IF ONLINE
             if (booking.Type == "Online")
             {
                 booking.MeetingLink = await _zoom.CreateMeetingAsync(
@@ -277,7 +277,7 @@ namespace PsyConnect.Controllers
             _context.Bookings.Add(booking);
             payment.Status = "Paid";
 
-            // ✅ CREATE ZOOM IF ONLINE
+            // CREATE ZOOM IF ONLINE
             if (booking.Type == "Online")
             {
                 booking.MeetingLink = await _zoom.CreateMeetingAsync(

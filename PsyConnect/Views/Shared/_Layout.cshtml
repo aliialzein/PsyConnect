@@ -15,29 +15,112 @@
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <style>
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.4rem;
+        :root {
+            --pc-bg: #ffffff;
+            --pc-text: #0f172a; /* slate-900 */
+            --pc-muted: #64748b; /* slate-500 */
+            --pc-border: rgba(15, 23, 42, .10);
+            --pc-shadow: 0 10px 30px rgba(2, 6, 23, .08);
+            --pc-shadow-sm: 0 6px 18px rgba(2, 6, 23, .08);
+            --pc-primary: #4f46e5; /* indigo-600 */
+            --pc-primary-700: #4338ca; /* indigo-700 */
+            --pc-primary-soft: rgba(79, 70, 229, .12);
+            --pc-danger-soft: rgba(220, 53, 69, .10);
+            --pc-radius: 16px;
         }
 
-        .hero {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #007bff, #6610f2);
-            color: white;
-            text-align: center;
+        body {
+            background: linear-gradient(180deg, rgba(79, 70, 229, .04), transparent 260px);
+            color: var(--pc-text);
+        }
+
+        /* Navbar: modern, glassy, with subtle border + blur */
+        .pc-navbar {
+            background: rgba(255,255,255,.78) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--pc-border) !important;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            letter-spacing: .2px;
+            font-size: 1.25rem;
+            display: inline-flex;
+            align-items: center;
+            gap: .55rem;
+            color: var(--pc-text) !important;
+        }
+
+        /* Little logo mark (UI-only) */
+        .pc-mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            display: inline-grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--pc-primary), #22c55e);
+            box-shadow: var(--pc-shadow-sm);
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+
+        /* Nav links: pill hover */
+        .navbar .nav-link {
+            color: rgba(15, 23, 42, .75) !important;
+            font-weight: 600;
+            padding: .55rem .8rem;
+            border-radius: 999px;
+            transition: background-color .15s ease, color .15s ease, transform .15s ease;
+        }
+
+            .navbar .nav-link:hover {
+                background: rgba(79, 70, 229, .08);
+                color: rgba(15, 23, 42, .95) !important;
+                transform: translateY(-1px);
+            }
+
+            .navbar .nav-link.active,
+            .navbar .nav-link[aria-current="page"] {
+                background: var(--pc-primary-soft);
+                color: var(--pc-primary) !important;
+            }
+
+        /* Main container spacing */
+        .pc-main {
+            padding-top: 1.25rem;
+            padding-bottom: 2rem;
+        }
+
+        /* Footer polish */
+        .pc-footer {
+            border-top: 1px solid var(--pc-border) !important;
+            background: rgba(255,255,255,.55);
+        }
+
+        /* Accessible focus */
+        .pc-focus:focus,
+        .btn:focus,
+        .nav-link:focus {
+            outline: none !important;
+            box-shadow: 0 0 0 .25rem rgba(79, 70, 229, .20) !important;
         }
     </style>
+
 </head>
 
 <body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light pc-navbar">
             <div class="container">
 
                 <!-- Logo -->
-                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
-                    PsyConnect
+                <a class="navbar-brand pc-focus" asp-controller="Home" asp-action="Index">
+                    <span class="pc-mark">Ψ</span>
+                    <span>PsyConnect</span>
                 </a>
+
 
                 <!-- Mobile toggle -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -100,12 +183,13 @@
     </header>
 
     <main role="main" class="flex-shrink-0">
-        <div class="container mt-4">
+        <div class="container pc-main">
             @RenderBody()
         </div>
     </main>
 
-    <footer class="py-3 text-center text-muted border-top mt-auto">
+
+    <footer class="py-3 text-center text-muted pc-footer mt-auto">
         <p class="mb-0">&copy; @DateTime.Now.Year - PsyConnect</p>
     </footer>
 

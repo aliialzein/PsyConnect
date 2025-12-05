@@ -1,45 +1,219 @@
 ﻿@model PsyConnect.Models.Booking
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Booking details";
 }
 
-<h1>Details</h1>
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.98);
+        --pc-shadow: 0 18px 50px rgba(15,23,42,.12);
+        --pc-radius: 18px;
+    }
 
-<div>
-    <h4>Booking</h4>
-    <hr />
-    <dl class="row">
+    .pc-wrap {
+        max-width: 900px;
+        margin: 0 auto;
+    }
 
-        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Title)</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Title)</dd>
+    .pc-card {
+        background: var(--pc-card);
+        border: 1px solid var(--pc-border);
+        border-radius: 22px;
+        box-shadow: var(--pc-shadow);
+        overflow: hidden;
+    }
 
-        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Description)</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Description)</dd>
+    .pc-head {
+        padding: 1rem 1.1rem;
+        border-bottom: 1px solid var(--pc-border);
+        background: radial-gradient(900px 240px at 10% 0%, rgba(79,70,229,.12), transparent 60%), radial-gradient(800px 220px at 90% 0%, rgba(34,197,94,.10), transparent 55%), rgba(255,255,255,.92);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
 
-        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Type)</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Type)</dd>
+    .pc-title {
+        margin: 0;
+        font-weight: 950;
+        color: var(--pc-text);
+        font-size: 1.2rem;
+    }
 
-        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Status)</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Status)</dd>
+    .pc-sub {
+        margin: .25rem 0 0;
+        color: var(--pc-muted);
+        font-weight: 650;
+        font-size: .92rem;
+    }
 
-        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.dateTime)</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.dateTime)</dd>
+    .pc-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        padding: .25rem .65rem;
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: .78rem;
+        border: 1px solid var(--pc-border);
+        white-space: nowrap;
+    }
+
+    .pc-status-Pending {
+        background: rgba(234,179,8,.14);
+        color: #854d0e;
+        border-color: rgba(234,179,8,.25);
+    }
+
+    .pc-status-InProgress {
+        background: rgba(59,130,246,.14);
+        color: #1d4ed8;
+        border-color: rgba(59,130,246,.22);
+    }
+
+    .pc-status-Completed {
+        background: rgba(34,197,94,.14);
+        color: #166534;
+        border-color: rgba(34,197,94,.22);
+    }
+
+    .pc-type {
+        background: rgba(79,70,229,.08);
+        color: rgba(79,70,229,.95);
+        border-color: rgba(79,70,229,.18);
+    }
+
+    .pc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding: 1.1rem;
+    }
+
+    .pc-field {
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(248,250,252,.85);
+        border-radius: 16px;
+        padding: .85rem .9rem;
+    }
+
+        .pc-field label {
+            display: block;
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: .10em;
+            color: rgba(100,116,139,.95);
+            font-weight: 900;
+            margin-bottom: .25rem;
+        }
+
+        .pc-field div {
+            color: rgba(15,23,42,.86);
+            font-weight: 700;
+        }
+
+    .pc-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: .75rem;
+        padding: 0 1.1rem 1.1rem;
+        flex-wrap: wrap;
+    }
+
+    .pc-btn {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+        padding: .6rem 1rem !important;
+    }
+
+    .pc-btn-primary {
+        background: var(--pc-primary) !important;
+        border-color: var(--pc-primary) !important;
+    }
+
+        .pc-btn-primary:hover {
+            background: var(--pc-primary-700) !important;
+            border-color: var(--pc-primary-700) !important;
+        }
+</style>
+
+<div class="pc-wrap">
+    <div class="pc-card">
+        <div class="pc-head">
+            <div>
+                <h1 class="pc-title">Booking details</h1>
+                <p class="pc-sub mb-0">Review session info, status, and meeting link when available.</p>
+            </div>
+
+            <div class="d-flex gap-2 flex-wrap">
+                <span class="pc-chip pc-type">
+                    <i class="bi @(Model.Type == "Online" ? "bi-camera-video" : "bi-geo-alt")"></i>
+                    @Model.Type
+                </span>
+
+                <span class="pc-chip pc-status-@Model.Status">
+                    <i class="bi @(Model.Status == "Pending" ? "bi-hourglass-split" : Model.Status == "InProgress" ? "bi-play-circle" : "bi-check2-circle")"></i>
+                    @Model.Status
+                </span>
+            </div>
+        </div>
+
+        <div class="pc-grid">
+            <div class="pc-field">
+                <label>@Html.DisplayNameFor(m => m.Title)</label>
+                <div>@Html.DisplayFor(m => m.Title)</div>
+            </div>
+
+            <div class="pc-field">
+                <label>@Html.DisplayNameFor(m => m.dateTime)</label>
+                <div>@Model.dateTime.ToString("ddd dd MMM yyyy HH:mm")</div>
+            </div>
+
+            <div class="pc-field">
+                <label>@Html.DisplayNameFor(m => m.Description)</label>
+                <div>@Html.DisplayFor(m => m.Description)</div>
+            </div>
+
+            <div class="pc-field">
+                <label>Session type</label>
+                <div>@Html.DisplayFor(m => m.Type)</div>
+            </div>
+        </div>
 
         @if (!string.IsNullOrEmpty(Model.MeetingLink))
         {
-            <dt class="col-sm-2">Meeting Link</dt>
-            <dd class="col-sm-10">
-                <a href="@Model.MeetingLink" target="_blank" class="btn btn-primary">
-                    Join Meeting
-                </a>
-            </dd>
+            <div class="px-4 pb-3">
+                <div class="alert alert-info mb-0" style="border-radius:16px;">
+                    <div class="fw-bold mb-1">
+                        <i class="bi bi-camera-video me-1"></i>
+                        Online meeting link available
+                    </div>
+                    <div class="small text-muted mb-2">
+                        Use the button below to join your session. Opens in a new tab.
+                    </div>
+                    <a href="@Model.MeetingLink" target="_blank" class="btn pc-btn pc-btn-primary text-white">
+                        <i class="bi bi-box-arrow-up-right me-1"></i>
+                        Join meeting
+                    </a>
+                </div>
+            </div>
         }
 
-    </dl>
+        <div class="pc-actions">
+            <a asp-action="Index" class="btn btn-outline-secondary pc-btn">
+                <i class="bi bi-arrow-left me-1"></i> Back to list
+            </a>
 
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-secondary pc-btn">
+                <i class="bi bi-pencil me-1"></i> Edit booking
+            </a>
+        </div>
+    </div>
 </div>

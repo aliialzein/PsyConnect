@@ -4,64 +4,408 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.92);
+        --pc-shadow: 0 18px 50px rgba(2,6,23,.10);
+        --pc-radius: 20px;
+    }
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+    .pc-auth-wrap {
+        min-height: calc(100vh - 220px);
+        display: flex;
+        align-items: center;
+        padding: 1.5rem 0 2.5rem;
+    }
+
+    .pc-auth-bg {
+        position: relative;
+        overflow: hidden;
+        border-radius: var(--pc-radius);
+        border: 1px solid var(--pc-border);
+        background: radial-gradient(800px 300px at 0% 0%, rgba(34,197,94,.14), transparent 55%), radial-gradient(900px 360px at 100% 10%, rgba(79,70,229,.18), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.75));
+        box-shadow: var(--pc-shadow);
+    }
+
+    .pc-left {
+        padding: 2rem;
+    }
+
+    .pc-right {
+        padding: 2rem;
+        border-left: 1px solid var(--pc-border);
+        background: linear-gradient(180deg, rgba(34,197,94,.03), rgba(79,70,229,.04));
+    }
+
+    .pc-brand {
+        display: flex;
+        align-items: center;
+        gap: .65rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .pc-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--pc-primary), #22c55e);
+        color: #fff;
+        font-weight: 900;
+        box-shadow: 0 10px 28px rgba(79,70,229,.25);
+    }
+
+    .pc-title {
+        font-size: 1.6rem;
+        font-weight: 900;
+        margin: 0;
+        color: var(--pc-text);
+        letter-spacing: .2px;
+    }
+
+    .pc-subtitle {
+        margin: .25rem 0 0;
+        color: var(--pc-muted);
+        font-weight: 600;
+        font-size: .95rem;
+    }
+
+    .pc-card {
+        background: var(--pc-card);
+        border: 1px solid var(--pc-border);
+        border-radius: var(--pc-radius);
+        padding: 1.5rem;
+    }
+
+    .pc-section-title {
+        font-weight: 900;
+        margin: 0 0 .25rem;
+        color: var(--pc-text);
+    }
+
+    .pc-section-desc {
+        color: var(--pc-muted);
+        margin: 0 0 1.25rem;
+        font-weight: 600;
+        font-size: .95rem;
+    }
+
+    .form-control {
+        border-radius: 14px !important;
+        border-color: rgba(15,23,42,.14) !important;
+        padding: 1rem .9rem;
+    }
+
+        .form-control:focus {
+            border-color: rgba(79,70,229,.65) !important;
+            box-shadow: 0 0 0 .25rem rgba(79,70,229,.15) !important;
+        }
+
+    .form-floating > label {
+        color: rgba(100,116,139,.95);
+        font-weight: 700;
+    }
+
+    .pc-btn {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+        padding: .85rem 1rem !important;
+        letter-spacing: .2px;
+    }
+
+    .pc-btn-primary {
+        background: var(--pc-primary) !important;
+        border-color: var(--pc-primary) !important;
+    }
+
+        .pc-btn-primary:hover {
+            background: var(--pc-primary-700) !important;
+            border-color: var(--pc-primary-700) !important;
+        }
+
+    .pc-divider {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        margin: 1.25rem 0 1rem;
+        color: rgba(100,116,139,.9);
+        font-weight: 800;
+        font-size: .85rem;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+    }
+
+        .pc-divider:before, .pc-divider:after {
+            content: "";
+            height: 1px;
+            background: rgba(15,23,42,.12);
+            flex: 1;
+        }
+
+    .pc-provider-btn {
+        border-radius: 14px !important;
+        font-weight: 800 !important;
+        padding: .8rem 1rem !important;
+        border: 1px solid rgba(15,23,42,.12) !important;
+        background: rgba(255,255,255,.85) !important;
+    }
+
+        .pc-provider-btn:hover {
+            background: rgba(79,70,229,.06) !important;
+            border-color: rgba(79,70,229,.22) !important;
+        }
+
+    .pc-benefit {
+        display: flex;
+        gap: .85rem;
+        padding: .85rem;
+        border-radius: 16px;
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(255,255,255,.6);
+        margin-bottom: .85rem;
+    }
+
+        .pc-benefit i {
+            font-size: 1.2rem;
+            color: var(--pc-primary);
+            margin-top: .1rem;
+        }
+
+        .pc-benefit h4 {
+            font-size: .98rem;
+            margin: 0;
+            font-weight: 900;
+            color: var(--pc-text);
+        }
+
+        .pc-benefit p {
+            margin: .2rem 0 0;
+            color: var(--pc-muted);
+            font-weight: 600;
+            font-size: .92rem;
+        }
+
+    .pc-note {
+        color: rgba(100,116,139,.95);
+        font-weight: 650;
+        font-size: .92rem;
+        margin: 1rem 0 0;
+    }
+
+    .pc-links a {
+        color: rgba(79,70,229,.95);
+        font-weight: 850;
+        text-decoration: none;
+    }
+
+        .pc-links a:hover {
+            text-decoration: underline;
+        }
+
+    .pc-pass-wrap {
+        position: relative;
+    }
+
+    .pc-pass-toggle {
+        position: absolute;
+        top: 50%;
+        right: .6rem;
+        transform: translateY(-50%);
+        border: 0;
+        background: transparent;
+        padding: .35rem .5rem;
+        border-radius: 10px;
+        color: rgba(100,116,139,.95);
+    }
+
+        .pc-pass-toggle:hover {
+            background: rgba(79,70,229,.08);
+            color: rgba(79,70,229,.95);
+        }
+</style>
+
+<div class="pc-auth-wrap">
+    <div class="container">
+        <div class="pc-auth-bg">
+            <div class="row g-0">
+
+                <!-- LEFT / FORM -->
+                <div class="col-lg-6 pc-left">
+                    <div class="pc-brand">
+                        <div class="pc-mark">Ψ</div>
                         <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
+                            <h1 class="pc-title mb-0">Create your account</h1>
+                            <p class="pc-subtitle">Start managing sessions with clarity and confidence.</p>
                         </div>
-                    </form>
-                }
-            }
-        </section>
+                    </div>
+
+                    <div class="pc-card">
+                        <h2 class="pc-section-title">Register</h2>
+                        <p class="pc-section-desc">Use your email and a strong password.</p>
+
+                        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                            <div class="form-floating mb-3">
+                                <input asp-for="Input.Email"
+                                       class="form-control"
+                                       autocomplete="username"
+                                       aria-required="true"
+                                       placeholder="name@example.com" />
+                                <label asp-for="Input.Email">Email</label>
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-3 pc-pass-wrap">
+                                <input asp-for="Input.Password"
+                                       class="form-control"
+                                       autocomplete="new-password"
+                                       aria-required="true"
+                                       placeholder="password"
+                                       id="pc-reg-pass" />
+                                <label asp-for="Input.Password">Password</label>
+                                <button type="button" class="pc-pass-toggle" aria-label="Toggle password visibility" id="pc-toggleRegPass">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-3 pc-pass-wrap">
+                                <input asp-for="Input.ConfirmPassword"
+                                       class="form-control"
+                                       autocomplete="new-password"
+                                       aria-required="true"
+                                       placeholder="password"
+                                       id="pc-reg-confirm" />
+                                <label asp-for="Input.ConfirmPassword">Confirm password</label>
+                                <button type="button" class="pc-pass-toggle" aria-label="Toggle confirm password visibility" id="pc-toggleRegConfirm">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            </div>
+
+                            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg pc-btn pc-btn-primary text-white">
+                                <i class="bi bi-person-plus me-2"></i>
+                                Create account
+                            </button>
+
+                            <div class="pc-links mt-3">
+                                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">
+                                    Already have an account? Log in
+                                </a>
+                            </div>
+                        </form>
+
+                        <div class="pc-divider">or</div>
+
+                        <section>
+                            @{
+                                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                                {
+                                    <p class="pc-note mb-0">
+                                        No external registration providers are configured.
+                                    </p>
+                                }
+                                else
+                                {
+                                    <form id="external-account"
+                                          asp-page="./ExternalLogin"
+                                          asp-route-returnUrl="@Model.ReturnUrl"
+                                          method="post"
+                                          class="d-grid gap-2">
+                                        @foreach (var provider in Model.ExternalLogins!)
+                                        {
+                                            <button type="submit"
+                                                    class="btn pc-provider-btn"
+                                                    name="provider"
+                                                    value="@provider.Name"
+                                                    title="Log in using your @provider.DisplayName account">
+                                                <i class="bi bi-shield-check me-2"></i>
+                                                Continue with @provider.DisplayName
+                                            </button>
+                                        }
+                                    </form>
+                                }
+                            }
+                        </section>
+                    </div>
+                </div>
+
+                <!-- RIGHT / BENEFITS -->
+                <div class="col-lg-6 pc-right">
+                    <h3 class="pc-section-title mb-2">Built for therapeutic work</h3>
+                    <p class="pc-section-desc mb-4">
+                        Onboarding should feel safe, simple, and supportive.
+                    </p>
+
+                    <div class="pc-benefit">
+                        <i class="bi bi-lock"></i>
+                        <div>
+                            <h4>Privacy-first design</h4>
+                            <p>Clear account flows and sensible defaults that build trust.</p>
+                        </div>
+                    </div>
+
+                    <div class="pc-benefit">
+                        <i class="bi bi-journal-check"></i>
+                        <div>
+                            <h4>Organized sessions</h4>
+                            <p>Bookings and history designed to reduce cognitive load.</p>
+                        </div>
+                    </div>
+
+                    <div class="pc-benefit">
+                        <i class="bi bi-credit-card-2-front"></i>
+                        <div>
+                            <h4>Transparent payments</h4>
+                            <p>Stripe checkout experiences that feel consistent and calm.</p>
+                        </div>
+                    </div>
+
+                    <div class="pc-benefit">
+                        <i class="bi bi-stars"></i>
+                        <div>
+                            <h4>Optional AI support</h4>
+                            <p>Helpful guidance — always under your control.</p>
+                        </div>
+                    </div>
+
+                    <p class="pc-note">
+                        By creating an account, you’ll be able to book sessions, join Zoom calls, and pay securely.
+                    </p>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // UI-only password visibility toggles
+        (function () {
+            function bindToggle(inputId, btnId) {
+                const input = document.getElementById(inputId);
+                const btn = document.getElementById(btnId);
+                if (!input || !btn) return;
+
+                btn.addEventListener('click', function () {
+                    const isHidden = input.getAttribute('type') === 'password';
+                    input.setAttribute('type', isHidden ? 'text' : 'password');
+                    btn.innerHTML = isHidden ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
+                });
+            }
+
+            bindToggle('pc-reg-pass', 'pc-toggleRegPass');
+            bindToggle('pc-reg-confirm', 'pc-toggleRegConfirm');
+        })();
+    </script>
 }

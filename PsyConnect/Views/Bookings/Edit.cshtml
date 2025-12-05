@@ -4,33 +4,114 @@
     ViewData["Title"] = "Edit Booking";
 }
 
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.98);
+        --pc-shadow: 0 18px 50px rgba(15,23,42,.12);
+        --pc-radius: 18px;
+    }
+
+    .pc-card {
+        background: var(--pc-card);
+        border: 1px solid var(--pc-border);
+        border-radius: 22px;
+        box-shadow: var(--pc-shadow);
+        overflow: hidden;
+    }
+
+    .pc-card-header {
+        padding: 1rem 1.1rem;
+        border-bottom: 1px solid var(--pc-border);
+        background: radial-gradient(900px 240px at 10% 0%, rgba(79,70,229,.12), transparent 60%), rgba(255,255,255,.92);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: .75rem;
+        flex-wrap: wrap;
+    }
+
+    .pc-h {
+        margin: 0;
+        font-weight: 950;
+        color: var(--pc-text);
+    }
+
+    .pc-sub {
+        margin: .2rem 0 0;
+        color: var(--pc-muted);
+        font-weight: 650;
+        font-size: .92rem;
+    }
+
+    .form-control, .form-select {
+        border-radius: 14px !important;
+        border-color: rgba(15,23,42,.14) !important;
+        padding: .9rem .9rem !important;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: rgba(79,70,229,.65) !important;
+            box-shadow: 0 0 0 .25rem rgba(79,70,229,.15) !important;
+        }
+
+    .pc-timeslots .timeslot {
+        border-radius: 999px !important;
+        font-weight: 850 !important;
+        padding: .45rem .8rem !important;
+    }
+
+    .pc-btn {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+        padding: .6rem 1rem !important;
+    }
+
+    .pc-btn-primary {
+        background: var(--pc-primary) !important;
+        border-color: var(--pc-primary) !important;
+    }
+
+        .pc-btn-primary:hover {
+            background: var(--pc-primary-700) !important;
+            border-color: var(--pc-primary-700) !important;
+        }
+</style>
+
 <div class="row justify-content-center">
-    <div class="col-lg-6 col-md-8">
-        <div class="card shadow-sm">
-            <div class="card-header">
-                <h1 class="h5 mb-0">Edit Booking</h1>
+    <div class="col-lg-7 col-md-9">
+        <div class="pc-card">
+            <div class="pc-card-header">
+                <div>
+                    <h1 class="h5 pc-h">Edit booking</h1>
+                    <div class="pc-sub">Update details and choose a new date/time if needed.</div>
+                </div>
             </div>
 
-            <div class="card-body">
+            <div class="card-body p-4">
                 <form asp-action="Edit" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                     <input type="hidden" asp-for="Id" />
 
                     <div class="mb-3">
-                        <label asp-for="Title" class="form-label"></label>
+                        <label asp-for="Title" class="form-label fw-bold"></label>
                         <input asp-for="Title" class="form-control" />
                         <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Description" class="form-label"></label>
+                        <label asp-for="Description" class="form-label fw-bold"></label>
                         <input asp-for="Description" class="form-control" />
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="Type" class="form-label"></label>
+                        <label asp-for="Type" class="form-label fw-bold"></label>
                         <select asp-for="Type" class="form-select">
                             <option value="Onsite">Onsite</option>
                             <option value="Online">Online</option>
@@ -38,20 +119,9 @@
                         <span asp-validation-for="Type" class="text-danger"></span>
                     </div>
 
-                    <!-- Read-only session number & status -->
-                    <div class="mb-3">
-                        <label class="form-label">Session #</label>
-                        <p class="form-control-plaintext">@Model.Number</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <p class="form-control-plaintext">@Model.Status</p>
-                    </div>
-
                     <!-- DATE -->
                     <div class="mb-3">
-                        <label class="form-label">Date</label>
+                        <label class="form-label fw-bold">Date</label>
                         <input id="BookingDate"
                                name="BookingDate"
                                class="form-control"
@@ -62,8 +132,8 @@
                     </div>
 
                     <!-- TIME SLOTS -->
-                    <div class="mb-3">
-                        <label class="form-label">Time</label>
+                    <div class="mb-3 pc-timeslots">
+                        <label class="form-label fw-bold">Time</label>
                         <div id="timeSlots" class="d-flex flex-wrap gap-2">
                             <button type="button" class="btn btn-outline-primary timeslot" data-time="09:00">9:00 am</button>
                             <button type="button" class="btn btn-outline-primary timeslot" data-time="10:00">10:00 am</button>
@@ -76,17 +146,19 @@
                         </div>
                     </div>
 
-                    <!-- Hidden selected time -->
                     <input type="hidden" id="SelectedTime" name="SelectedTime" />
 
-                    <!-- Errors for final date/time -->
                     <div class="mb-3">
                         <span asp-validation-for="dateTime" class="text-danger"></span>
                     </div>
 
                     <div class="d-flex justify-content-between">
-                        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary pc-btn">
+                            <i class="bi bi-arrow-left me-1"></i> Back
+                        </a>
+                        <button type="submit" class="btn pc-btn pc-btn-primary text-white">
+                            <i class="bi bi-check2-circle me-1"></i> Save changes
+                        </button>
                     </div>
                 </form>
             </div>
@@ -109,7 +181,6 @@
             const currentTime = "@Model.dateTime.ToString("HH:mm")";
             let selectedTime = null;
 
-            // Preselect the current time slot
             document.querySelectorAll(".timeslot").forEach(btn => {
                 const time = btn.getAttribute("data-time");
                 if (time === currentTime) {
@@ -138,12 +209,9 @@
             form.addEventListener("submit", function (e) {
                 if (!dateInput.value || !selectedTimeInput.value) {
                     e.preventDefault();
-                    if (errorSpan) {
-                        errorSpan.textContent = "Please select a date and a time slot.";
-                    }
+                    if (errorSpan) errorSpan.textContent = "Please select a date and a time slot.";
                 }
             });
         });
     </script>
 }
-

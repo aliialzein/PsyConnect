@@ -4,41 +4,205 @@
     ViewData["Title"] = "Payment Checkout";
 }
 
-<h2>Payment Checkout</h2>
+<style>
+    :root {
+        --pc-primary: #4f46e5;
+        --pc-primary-700: #4338ca;
+        --pc-text: #0f172a;
+        --pc-muted: #64748b;
+        --pc-border: rgba(15,23,42,.12);
+        --pc-card: rgba(255,255,255,.98);
+        --pc-shadow: 0 18px 50px rgba(15,23,42,.12);
+        --pc-radius: 18px;
+    }
 
-<div class="card p-3">
-    <h4>Session Summary</h4>
-    <p><strong>Title:</strong> @Model.BookingTitle</p>
-    <p><strong>Type:</strong> @Model.BookingType</p>
-    <p><strong>Date &amp; Time:</strong> @Model.BookingDateTime</p>
-    <p><strong>Amount:</strong> @Model.Amount.ToString("0.00") $</p>
-</div>
+    .pc-wrap {
+        max-width: 960px;
+        margin: 0 auto;
+    }
 
-<hr />
+    .pc-card {
+        background: var(--pc-card);
+        border: 1px solid var(--pc-border);
+        border-radius: 22px;
+        box-shadow: var(--pc-shadow);
+        overflow: hidden;
+    }
 
-<h4>Dummy Payment Gateway</h4>
-<p>This is a simulated payment page for the project (no real money).</p>
+    .pc-head {
+        padding: 1rem 1.1rem;
+        border-bottom: 1px solid var(--pc-border);
+        background: radial-gradient(900px 240px at 10% 0%, rgba(79,70,229,.12), transparent 60%), rgba(255,255,255,.92);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
 
-<form asp-action="DummyConfirm" method="post">
-    <input type="hidden" name="id" value="@Model.Id" />
+    .pc-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 950;
+        color: var(--pc-text);
+    }
 
-    <!-- Fake card inputs just for UI -->
-    <div class="form-group">
-        <label>Card Number</label>
-        <input class="form-control" placeholder="0000 0000 0000 0000" />
+    .pc-sub {
+        margin: .25rem 0 0;
+        color: var(--pc-muted);
+        font-weight: 650;
+        font-size: .92rem;
+    }
+
+    .pc-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        padding: .3rem .7rem;
+        border-radius: 999px;
+        border: 1px solid rgba(234,179,8,.25);
+        background: rgba(234,179,8,.10);
+        color: #854d0e;
+        font-weight: 900;
+        font-size: .8rem;
+        white-space: nowrap;
+    }
+
+    .pc-body {
+        padding: 1.1rem;
+    }
+
+    .pc-summary {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .9rem;
+        margin-bottom: 1rem;
+    }
+
+    .pc-field {
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(248,250,252,.85);
+        border-radius: 16px;
+        padding: .85rem .9rem;
+    }
+
+        .pc-field label {
+            display: block;
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: .10em;
+            color: rgba(100,116,139,.95);
+            font-weight: 900;
+            margin-bottom: .25rem;
+        }
+
+        .pc-field div {
+            color: rgba(15,23,42,.86);
+            font-weight: 700;
+        }
+
+    .pc-form .form-control {
+        border-radius: 14px !important;
+        border-color: rgba(15,23,42,.14) !important;
+        padding: .9rem .9rem !important;
+    }
+
+        .pc-form .form-control:focus {
+            border-color: rgba(79,70,229,.65) !important;
+            box-shadow: 0 0 0 .25rem rgba(79,70,229,.15) !important;
+        }
+
+    .pc-btn {
+        border-radius: 999px !important;
+        font-weight: 900 !important;
+        padding: .6rem 1rem !important;
+    }
+
+    .pc-btn-success {
+        background: #16a34a !important;
+        border-color: #16a34a !important;
+    }
+
+        .pc-btn-success:hover {
+            background: #15803d !important;
+            border-color: #15803d !important;
+        }
+
+    .pc-link {
+        font-weight: 800;
+        color: rgba(79,70,229,.95);
+        text-decoration: none;
+    }
+
+        .pc-link:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="pc-wrap">
+    <div class="pc-card">
+        <div class="pc-head">
+            <div>
+                <h2 class="pc-title">Dummy checkout</h2>
+                <div class="pc-sub">This page is simulated for the project — no real money is charged.</div>
+            </div>
+            <span class="pc-badge"><i class="bi bi-cone-striped"></i> Test mode</span>
+        </div>
+
+        <div class="pc-body">
+            <h4 class="mb-2 fw-bold" style="color: var(--pc-text);">Session summary</h4>
+
+            <div class="pc-summary">
+                <div class="pc-field">
+                    <label>Title</label>
+                    <div>@Model.BookingTitle</div>
+                </div>
+                <div class="pc-field">
+                    <label>Type</label>
+                    <div>@Model.BookingType</div>
+                </div>
+                <div class="pc-field">
+                    <label>Date &amp; time</label>
+                    <div>@Model.BookingDateTime</div>
+                </div>
+                <div class="pc-field">
+                    <label>Amount</label>
+                    <div>@Model.Amount.ToString("0.00") $</div>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="border-radius:16px;">
+                <strong>Note:</strong> These fields are UI-only for demo purposes.
+            </div>
+
+            <form asp-action="DummyConfirm" method="post" class="pc-form">
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Card Number</label>
+                        <input class="form-control" placeholder="0000 0000 0000 0000" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Expiry</label>
+                        <input class="form-control" placeholder="MM/YY" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">CVC</label>
+                        <input class="form-control" placeholder="123" />
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
+                    <a asp-controller="Bookings" asp-action="Create" class="pc-link">
+                        <i class="bi bi-arrow-left me-1"></i> Cancel and go back
+                    </a>
+
+                    <button type="submit" class="btn pc-btn pc-btn-success text-white">
+                        <i class="bi bi-lock-fill me-1"></i> Pay now
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-group">
-        <label>Expiry</label>
-        <input class="form-control" placeholder="MM/YY" />
-    </div>
-    <div class="form-group">
-        <label>CVC</label>
-        <input class="form-control" placeholder="123" />
-    </div>
-
-    <button type="submit" class="btn btn-success mt-3">Pay Now</button>
-</form>
-
-<div class="mt-3">
-    <a asp-controller="Bookings" asp-action="Create" class="btn btn-link">Cancel and go back</a>
 </div>
