@@ -12,3 +12,4 @@ PsyConnect/appsettings.json
 PsyConnect/appsettings.*.json
 
 .vs/
+.fake
