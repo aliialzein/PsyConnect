@@ -30,8 +30,27 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 // DB + Identity
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (!string.IsNullOrEmpty(connectionString) &&
+    connectionString.StartsWith("postgres://"))
+{
+    var uri = new Uri(connectionString);
+
+    var userInfo = uri.UserInfo.Split(':');
+
+    connectionString =
+        $"Host={uri.Host};" +
+        $"Port={uri.Port};" +
+        $"Database={uri.AbsolutePath.Trim('/')};" +
+        $"Username={userInfo[0]};" +
+        $"Password={userInfo[1]};" +
+        $"SSL Mode=Require;Trust Server Certificate=true";
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
